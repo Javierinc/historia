@@ -81,7 +81,7 @@ function startQuiz() {
     score = 0;
     resultsContainer.style.display = 'none';
     questionWrapper.style.display = 'block';
-    scoreContainer.textContent = `Puntaje: ${score}`;
+    scoreContainer.textContent = `Progreso: ${score} de ${quizData.length} preguntas`;
     loadQuestion();
 }
 
@@ -98,15 +98,14 @@ function loadQuestion() {
     currentQuestion.options.forEach((option, index) => {
         const button = document.createElement('button');
         button.textContent = option;
-        button.classList.add('p-4', 'border-2', 'border-blue-300', 'rounded-lg', 'text-left', 'hover:bg-blue-100', 'transition-colors');
+        button.classList.add('option-btn', 'p-4', 'border-2', 'border-blue-300', 'rounded-lg', 'text-left', 'hover:bg-blue-100', 'transition-colors');
         button.dataset.index = index;
         button.addEventListener('click', () => {
             if (selectedOption !== null) {
-                // Desmarcar la opción previamente seleccionada
-                optionsContainer.children[selectedOption].classList.remove('bg-blue-200', 'border-blue-500');
+                optionsContainer.children[selectedOption].classList.remove('selected', 'bg-blue-200', 'border-blue-500');
             }
             selectedOption = index;
-            button.classList.add('bg-blue-200', 'border-blue-500');
+            button.classList.add('selected', 'bg-blue-200', 'border-blue-500');
         });
         optionsContainer.appendChild(button);
     });
@@ -114,7 +113,7 @@ function loadQuestion() {
 
 checkAnswerBtn.addEventListener('click', () => {
     if (selectedOption === null) {
-        alert('Por favor, selecciona una respuesta.');
+        alert('Por favor, selecciona una respuesta para continuar.');
         return;
     }
 
@@ -128,19 +127,37 @@ checkAnswerBtn.addEventListener('click', () => {
         btn.classList.remove('hover:bg-blue-100');
     }
 
+    const selectedButton = optionButtons[selectedOption];
+    const correctButton = optionButtons[correctOptionIndex];
+
     if (selectedOption === correctOptionIndex) {
         score++;
-        optionButtons[selectedOption].classList.remove('bg-blue-200');
-        optionButtons[selectedOption].classList.add('bg-green-500', 'text-white', 'border-green-700');
-        feedbackContainer.innerHTML = `<p class="text-green-800">¡Correcto! ✔️</p><p class="text-sm mt-2 text-gray-700">${currentQuestion.explanation}</p>`;
+        selectedButton.classList.remove('bg-blue-200');
+        selectedButton.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
+        
+        feedbackContainer.innerHTML = `
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg">
+                <p class="text-emerald-800 font-semibold">¡Excelente respuesta! 🌟</p>
+                <p class="text-sm mt-2 text-gray-700">${currentQuestion.explanation}</p>
+                <p class="text-sm mt-2 text-emerald-600">Sigue así, ¡vas muy bien!</p>
+            </div>
+        `;
     } else {
-        optionButtons[selectedOption].classList.remove('bg-blue-200');
-        optionButtons[selectedOption].classList.add('bg-red-500', 'text-white', 'border-red-700');
-        optionButtons[correctOptionIndex].classList.add('bg-green-500', 'text-white', 'border-green-700');
-         feedbackContainer.innerHTML = `<p class="text-red-800">¡Incorrecto! ❌</p><p class="text-sm mt-2 text-gray-700">La respuesta correcta era: "${currentQuestion.options[correctOptionIndex]}".<br>${currentQuestion.explanation}</p>`;
+        selectedButton.classList.remove('bg-blue-200');
+        selectedButton.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-800');
+        correctButton.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
+        
+        feedbackContainer.innerHTML = `
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg">
+                <p class="text-amber-800 font-semibold">¡Buen intento! 💡</p>
+                <p class="text-sm mt-2 text-gray-700">La respuesta correcta era: "${currentQuestion.options[correctOptionIndex]}"</p>
+                <p class="text-sm mt-2 text-gray-700">${currentQuestion.explanation}</p>
+                <p class="text-sm mt-2 text-amber-600">¡No te desanimes! Cada pregunta es una oportunidad para aprender algo nuevo.</p>
+            </div>
+        `;
     }
 
-    scoreContainer.textContent = `Puntaje: ${score}`;
+    scoreContainer.textContent = `Progreso: ${score} de ${quizData.length} preguntas`;
     feedbackContainer.style.display = 'block';
     checkAnswerBtn.style.display = 'none';
     nextQuestionBtn.style.display = 'inline-block';
@@ -158,7 +175,24 @@ nextQuestionBtn.addEventListener('click', () => {
 function showResults() {
     questionWrapper.style.display = 'none';
     resultsContainer.style.display = 'block';
-    finalScore.textContent = `Obtuviste ${score} de ${quizData.length} puntos.`;
+    
+    const percentage = (score / quizData.length) * 100;
+    let message = '';
+    
+    if (percentage === 100) {
+        message = '¡Felicitaciones! 🎉 Has demostrado un excelente conocimiento de la Conquista de Chile.';
+    } else if (percentage >= 80) {
+        message = '¡Muy buen trabajo! 🌟 Tienes un sólido entendimiento del tema.';
+    } else if (percentage >= 60) {
+        message = '¡Buen esfuerzo! 💪 Has aprendido bastante sobre la Conquista de Chile.';
+    } else {
+        message = '¡Gracias por participar! 📚 Cada intento es una oportunidad para aprender más.';
+    }
+
+    finalScore.innerHTML = `
+        <p class="mb-4">Obtuviste ${score} de ${quizData.length} puntos</p>
+        <p class="text-gray-700">${message}</p>
+    `;
 }
 
 restartQuizBtn.addEventListener('click', startQuiz);

@@ -150,13 +150,33 @@
             .fixed-header .topic-title {
                 display: none; /* Ocultar título del tema en móvil para más espacio */
             }
+
+            body {
+                /* Añadimos padding-bottom para que el contenido no quede oculto por la barra de navegación fija */
+                padding-bottom: 80px; 
+            }
+
+            .navigation-buttons {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin-top: 0;
+                padding: 0.75rem 1rem;
+                background-color: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border-top: 1px solid #e0e0e0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+                z-index: 1000;
+            }
         }
     </style>
 </head>
 <body>
 
     <header class="fixed-header">
-        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
+        <div class="site-title"><a href="../../index.html">Historia para Exploradoras</a></div>
         <div class="topic-title">La Conquista de Chile</div>
     </header>
 
@@ -174,7 +194,7 @@
                     </p>
                     <div class="text-center my-6">
                         <a href="gimnasio.html" class="nav-btn" style="text-decoration: none; background-color: #27ae60; display: inline-block; padding: 0.8rem 2rem;">
-                            🧠 Gimnasio de Pruebas
+                            🧠 Gimnasio
                         </a>
                     </div>
                     <p class="text-gray-700">
@@ -518,70 +538,69 @@
                         ¡Es hora de probar lo que aprendiste!
                     </h2>
                     <p class="text-center text-gray-700 mb-6">
-                        Has completado el recorrido por la Conquista de Chile. Ahora, desafía tus conocimientos en nuestro Gimnasio de Pruebas.
+                        Has completado el recorrido por la Conquista de Chile. Ahora, desafía tus conocimientos en nuestro Gimnasio.
                     </p>
                     <div class="text-center">
-                        <a href="gimnasio.html" class="nav-btn" style="background-color: #27ae60; display: inline-block; padding: 0.8rem 2rem;">
-                            Ir al Gimnasio de Pruebas 🧠
-                        </a>
+                        <a href="gimnasio.html" class="nav-btn" style="background-color: #27ae60; display: inline-block; padding: 0.8rem 2rem;">Ir al Gimnasio 🧠</a>
                     </div>
                 </div>
             </div>
 
             <!-- Navegación -->
             <div class="navigation-buttons">
-                <button id="prev-btn" class="nav-btn">← Anterior</button>
-                <span id="topicIndicator" class="topic-indicator">Tema 1 de 14</span>
-                <button id="nextBtn" class="nav-btn">Siguiente ➡️</button>
+                <button id="prev-btn" class="nav-btn">Anterior</button>
+                <span id="topicIndicator" class="topic-indicator">1 de 14</span>
+                <button id="nextBtn" class="nav-btn">Siguiente</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentTopic = 0;
-        const topics = document.querySelectorAll('.topic-content');
-        const totalTopics = topics.length;
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('nextBtn');
-        const topicIndicator = document.getElementById('topicIndicator');
-
-        function showTopic(index) {
-            topics.forEach((topic, i) => {
-                topic.classList.remove('active');
-            });
-            topics[index].classList.add('active');
-            updateButtons();
-            updateTopicIndicator();
-            window.scrollTo(0, 0); // Vuelve al inicio de la página al cambiar de tópico
-        }
-
-        function updateButtons() {
-            prevBtn.disabled = (currentTopic === 0);
-            nextBtn.disabled = (currentTopic === totalTopics - 1);
-        }
-
-        function updateTopicIndicator() {
-            topicIndicator.textContent = `Tema ${currentTopic + 1} de ${totalTopics}`;
-        }
-
-        function nextTopic() {
-            if (currentTopic < totalTopics - 1) {
-                currentTopic++;
-                showTopic(currentTopic);
-            }
-        }
-
-        function prevTopic() {
-            if (currentTopic > 0) {
-                currentTopic--;
-                showTopic(currentTopic);
-            }
-        }
-
-        prevBtn.addEventListener('click', prevTopic);
-        nextBtn.addEventListener('click', nextTopic);
-
         document.addEventListener('DOMContentLoaded', () => {
+            let currentTopic = 0;
+            const topics = document.querySelectorAll('.topic-content');
+            const totalTopics = topics.length;
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('nextBtn');
+            const topicIndicator = document.getElementById('topicIndicator');
+
+            function showTopic(index) {
+                topics.forEach((topic, i) => {
+                    topic.classList.remove('active');
+                });
+                topics[index].classList.add('active');
+                updateButtons();
+                updateTopicIndicator();
+                window.scrollTo(0, 0); // Vuelve al inicio de la página al cambiar de tópico
+            }
+
+            function updateButtons() {
+                prevBtn.disabled = (currentTopic === 0);
+                nextBtn.disabled = (currentTopic === totalTopics - 1);
+            }
+
+            function updateTopicIndicator() {
+                topicIndicator.textContent = `${currentTopic + 1} de ${totalTopics}`;
+            }
+
+            function nextTopic() {
+                if (currentTopic < totalTopics - 1) {
+                    currentTopic++;
+                    showTopic(currentTopic);
+                }
+            }
+
+            function prevTopic() {
+                if (currentTopic > 0) {
+                    currentTopic--;
+                    showTopic(currentTopic);
+                }
+            }
+
+            prevBtn.addEventListener('click', prevTopic);
+            nextBtn.addEventListener('click', nextTopic);
+
+            // Se inicializa con el primer tópico visible.
             showTopic(currentTopic);
         });
     </script>
