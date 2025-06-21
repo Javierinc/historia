@@ -2,82 +2,91 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Línea de Tiempo: La Conquista</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --header-height: 75px; }
-        html, body {
-            height: 100%; margin: 0; overflow-x: hidden; background-color: #f8f9fa;
+        /* --- Estilos base y configuración --- */
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
+
         body {
-            font-family: 'Inter', sans-serif; padding-top: var(--header-height); display: flex; flex-direction: column;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
         }
-        .fixed-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
-            background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 0 2rem; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+
+        /* --- Contenedor Principal --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem;
         }
-        .fixed-header .site-title a { font-size: 1.2rem; font-weight: 700; text-decoration: none; color: #2c3e50; }
-        .fixed-header .topic-title { font-size: 1.1rem; font-weight: 500; color: #6c757d; }
         
-        main { flex-grow: 1; padding: 2rem 1rem; }
-        .container { max-width: 1200px; margin: auto; background-color: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        main {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+        
         .quiz-instructions { text-align: center; margin-bottom: 2rem; }
 
+        /* --- Línea de Tiempo Vertical --- */
         #timeline-container {
-            display: flex;
-            justify-content: space-between;
             position: relative;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            /* Scroll horizontal en móvil para la línea de tiempo */
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            padding-left: 60px; /* Espacio para la barra y los años */
+            border-left: 4px solid #e0e0e0;
+            margin: 2rem 0;
         }
-        #timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background-color: #bdc3c7;
-            transform: translateY(-50%);
-        }
+
         .timeline-slot {
             position: relative;
-            min-width: 150px;
-            text-align: center;
+            padding: 0.5rem 0 0.5rem 1.5rem; /* Espacio interno */
+            min-height: 80px; /* Altura mínima para cada fila */
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
         }
+        .timeline-slot:not(:last-child) {
+            margin-bottom: 1rem; /* Espacio entre eventos */
+        }
+
+        /* El punto en la línea de tiempo */
+        .timeline-slot::before {
+            content: '';
+            position: absolute;
+            left: -12px; /* Centrado sobre la línea */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            border: 4px solid white; /* Borde para separarlo de la línea */
+        }
+
         .timeline-year {
-            font-weight: 700;
-            color: #2c3e50;
-            background-color: white;
-            padding: 0 10px;
-            z-index: 1;
+            position: absolute;
+            left: -75px; /* A la izquierda de la línea */
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #6c757d;
         }
+
         .drop-zone {
-            width: 140px;
-            height: 80px;
+            width: 100%;
+            height: 70px;
             border: 2px dashed #bdc3c7;
             border-radius: 0.25rem;
-            transition: background-color 0.2s, border-color 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: white;
-            z-index: 1;
+            transition: background-color 0.2s;
         }
-        .drop-zone.drag-over { background-color: #ecf0f1; border-color: #3498db; }
-        .drop-zone.correct { border: 2px solid #2ecc71 !important; }
-        .drop-zone.incorrect { border: 2px solid #e74c3c !important; }
-
+        
+        /* --- Contenedor de Eventos --- */
         #events-container {
             display: flex;
             flex-wrap: wrap;
@@ -88,6 +97,8 @@
             border-radius: 0.5rem;
             min-height: 100px;
         }
+
+        /* --- Tarjetas de Eventos --- */
         .event-card {
             padding: 0.5rem;
             width: 140px;
@@ -97,54 +108,144 @@
             cursor: grab;
             text-align: center;
             font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
         }
-        .event-card.dragging { opacity: 0.5; cursor: grabbing; }
+        .event-card.dragging { opacity: 0.5; }
+        .event-card.selected { outline: 3px solid #0af; outline-offset: 2px; }
 
+        /* --- Estilos de Feedback --- */
+        .drop-zone.drag-over { background-color: #ecf0f1; }
+        .drop-zone.correct { border: 2px solid #2ecc71; }
+        .drop-zone.incorrect { border: 2px solid #e74c3c; }
+
+        /* --- Acciones y Resultados --- */
         .actions { text-align: center; margin-top: 2rem; }
-        .action-btn { background-color: #2ecc71; color: white; padding: 0.7rem 1.5rem; border-radius: 0.25rem; font-weight: 600; border: none; cursor: pointer; }
-        .action-btn.reset { background-color: #e74c3c; }
+        .action-btn { padding: 0.7rem 1.5rem; border-radius: 0.25rem; font-weight: 600; border: none; cursor: pointer; }
+        .action-btn.check { background-color: #2ecc71; color: white; }
+        .action-btn.reset { background-color: #e74c3c; color: white; }
         #result-text { margin-top: 1rem; font-size: 1.25rem; font-weight: 600; }
 
-        footer { text-align: center; padding: 1rem; margin-top: 2rem; color: #7f8c8d; }
+        /* --- Cabecera y Pie de página --- */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 1rem;
+        }
+        .site-header .site-title a { font-size: 1.2em; font-weight: bold; text-decoration: none; color: inherit; }
+        .site-header .topic-title { font-size: 1em; color: #6c757d; }
+        footer { text-align: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #dee2e6; }
+        footer a { color: #0af; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* --- Estilos para la línea de tiempo horizontal en escritorio --- */
+        @media (min-width: 992px) {
+            #timeline-container {
+                /* Resetear estilos verticales */
+                border-left: none;
+                padding-left: 0;
+                
+                /* Aplicar estilos horizontales */
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;
+                
+                /* Crear la línea horizontal con un pseudo-elemento */
+                position: relative;
+                padding-top: 2rem; /* Espacio para los años arriba */
+                margin-top: 3rem;
+            }
+
+            #timeline-container::before {
+                content: '';
+                position: absolute;
+                top: 70px; /* Posición vertical de la línea */
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background-color: #e0e0e0;
+                z-index: 0;
+            }
+
+            .timeline-slot {
+                /* Resetear estilos verticales */
+                padding: 0;
+                margin-bottom: 0;
+                min-height: auto;
+                
+                /* Estilos para los slots horizontales */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 140px; /* Ancho fijo para cada slot */
+                z-index: 1; /* Para que el contenido esté sobre la línea */
+            }
+
+            .timeline-slot:not(:last-child) {
+                margin-bottom: 0;
+            }
+
+            /* El punto en la línea de tiempo horizontal */
+            .timeline-slot::before {
+                top: 58px; /* Alinear con la línea horizontal del contenedor */
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: white; /* Para que parezca que está "sobre" la línea */
+                z-index: -1; /* Mueve el punto detrás del contenido del slot */
+            }
+
+            .timeline-year {
+                /* Mover el año encima de la línea */
+                position: static;
+                transform: none;
+                margin-bottom: 2.5rem; /* Espacio entre año y zona de drop */
+                background: white;
+                padding: 0 .5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <header class="fixed-header">
-        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
-        <div class="topic-title">Línea de Tiempo</div>
-    </header>
+    <div class="container">
+        <header class="site-header">
+            <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
+            <div class="topic-title">Línea de Tiempo</div>
+        </header>
 
-    <main>
-        <div class="container">
+        <main>
             <div class="quiz-instructions">
-                <h1 class="text-3xl font-bold mb-2">Ordena la Historia</h1>
-                <p class="text-gray-600">Arrastra cada evento a su lugar correcto en la línea de tiempo.</p>
+                <h1>Ordena la Historia</h1>
+                <p>Organiza los eventos en el orden cronológico correcto.</p>
             </div>
 
             <div id="timeline-container">
                 <!-- Slots generados por JS -->
             </div>
             
-            <p class="text-center font-bold my-4">Eventos para Ordenar</p>
+            <p style="text-align:center; font-weight: bold; margin-top: 2rem;">Eventos para Ordenar</p>
             <div id="events-container">
                 <!-- Eventos generados por JS -->
             </div>
 
             <div class="actions">
-                <button id="checkBtn" class="action-btn">Revisar Respuestas</button>
+                <button id="checkBtn" class="action-btn check">Revisar</button>
                 <button id="resetBtn" class="action-btn reset" style="display: none;">Intentar de Nuevo</button>
                 <p id="result-text"></p>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <footer>
-        <a href="gimnasio.html" class="text-blue-600 hover:underline">← Volver al Gimnasio de Pruebas</a>
-    </footer>
+        <footer>
+            <a href="gimnasio.html">← Volver al Gimnasio de Pruebas</a>
+        </footer>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. DATOS Y ELEMENTOS DEL DOM ---
             const quizData = [
                 { year: 1492, text: 'Descubrimiento de América' },
                 { year: 1521, text: 'Conquista del Imperio Azteca' },
@@ -152,7 +253,7 @@
                 { year: 1536, text: 'Llegada de Diego de Almagro a Chile' },
                 { year: 1541, text: 'Fundación de Santiago por Valdivia' },
                 { year: 1598, text: 'Desastre de Curalaba' }
-            ].sort((a, b) => a.year - b.year);
+            ].sort((a, b) => a.year - b.year); // Asegurarse de que esté ordenado por año
 
             const timelineContainer = document.getElementById('timeline-container');
             const eventsContainer = document.getElementById('events-container');
@@ -160,19 +261,21 @@
             const resetBtn = document.getElementById('resetBtn');
             const resultText = document.getElementById('result-text');
 
-            function shuffle(array) {
-                return array.sort(() => Math.random() - 0.5);
-            }
+            // --- 2. DETECCIÓN DE DISPOSITIVO TÁCTIL ---
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+            // --- 3. INICIALIZACIÓN DEL QUIZ ---
             function setupQuiz() {
+                // Limpiar contenedores y resultados
                 timelineContainer.innerHTML = '';
                 eventsContainer.innerHTML = '';
                 resultText.textContent = '';
                 checkBtn.style.display = 'inline-block';
                 resetBtn.style.display = 'none';
 
-                const shuffledEvents = shuffle([...quizData]);
+                const shuffledEvents = [...quizData].sort(() => Math.random() - 0.5);
 
+                // Crear la línea de tiempo con los años y las zonas para soltar
                 quizData.forEach(event => {
                     const slot = document.createElement('div');
                     slot.className = 'timeline-slot';
@@ -183,99 +286,107 @@
                     timelineContainer.appendChild(slot);
                 });
 
+                // Crear las tarjetas de eventos para ordenar
                 shuffledEvents.forEach(event => {
                     const card = document.createElement('div');
                     card.className = 'event-card';
-                    card.draggable = true;
                     card.dataset.year = event.year;
                     card.textContent = event.text;
                     eventsContainer.appendChild(card);
                 });
 
-                addDragAndDropListeners();
+                // Activar el modo de interacción correcto
+                if (isTouchDevice) {
+                    initMobileTap();
+                } else {
+                    initDesktopDragAndDrop();
+                }
             }
 
-            function addDragAndDropListeners() {
+            // --- 4. MODO ESCRITORIO: DRAG & DROP ---
+            function initDesktopDragAndDrop() {
                 const draggables = document.querySelectorAll('.event-card');
                 const dropZones = document.querySelectorAll('.drop-zone');
-                let draggingElement = null;
 
                 draggables.forEach(draggable => {
-                    // Mouse Events
+                    draggable.draggable = true;
                     draggable.addEventListener('dragstart', (e) => {
-                        draggingElement = e.target;
-                        setTimeout(() => e.target.style.display = 'none', 0);
+                        e.dataTransfer.setData('text/plain', draggable.dataset.year);
+                        draggable.classList.add('dragging');
                     });
                     draggable.addEventListener('dragend', () => {
-                        setTimeout(() => {
-                           if(draggingElement) draggingElement.style.display = 'block';
-                           draggingElement = null
-                        }, 0);
+                        draggable.classList.remove('dragging');
                     });
-
-                    // Touch Events
-                    draggable.addEventListener('touchstart', (e) => {
-                        draggingElement = e.target;
-                        // Clone for visual feedback on touch
-                        const clone = draggingElement.cloneNode(true);
-                        clone.style.position = 'absolute';
-                        clone.style.opacity = '0.8';
-                        clone.id = 'drag-clone';
-                        document.body.appendChild(clone);
-                        moveClone(e.touches[0]);
-                    }, { passive: false });
                 });
 
-                document.addEventListener('touchmove', (e) => {
-                    if (draggingElement && e.touches) {
-                        e.preventDefault();
-                        moveClone(e.touches[0]);
-                    }
-                }, { passive: false });
-
-                document.addEventListener('touchend', (e) => {
-                    const clone = document.getElementById('drag-clone');
-                    if (clone) {
-                        clone.style.display = 'none';
-                        const touch = e.changedTouches[0];
-                        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                        handleDrop(elementBelow);
-                        clone.remove();
-                    }
-                });
-
-                function moveClone(touch) {
-                     const clone = document.getElementById('drag-clone');
-                     if(clone) {
-                        clone.style.left = touch.pageX - clone.offsetWidth / 2 + 'px';
-                        clone.style.top = touch.pageY - clone.offsetHeight / 2 + 'px';
-                     }
-                }
+                const allDropTargets = [...dropZones, eventsContainer];
                 
-                function handleDrop(elementBelow) {
-                    if (!draggingElement) return;
-
-                    const dropZone = elementBelow ? elementBelow.closest('.drop-zone') : null;
-
-                    if (dropZone && !dropZone.children.length) {
-                        dropZone.appendChild(draggingElement);
-                    } else {
-                        eventsContainer.appendChild(draggingElement); // Return to pool
-                    }
-                    draggingElement.style.display = 'block';
-                    draggingElement = null;
-                }
-
-                [...dropZones, eventsContainer].forEach(container => {
-                    container.addEventListener('dragover', e => e.preventDefault());
-                    container.addEventListener('drop', e => {
+                allDropTargets.forEach(target => {
+                    target.addEventListener('dragover', (e) => {
                         e.preventDefault();
-                        handleDrop(e.target);
+                        if (target.classList.contains('drop-zone') && !target.hasChildNodes()) {
+                            target.classList.add('drag-over');
+                        }
+                    });
+                    target.addEventListener('dragleave', () => {
+                        if (target.classList.contains('drop-zone')) {
+                            target.classList.remove('drag-over');
+                        }
+                    });
+                    target.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        target.classList.remove('drag-over');
+
+                        const year = e.dataTransfer.getData('text/plain');
+                        const draggedElement = document.querySelector(`.event-card[data-year="${year}"]`);
+                        
+                        // Solo permite soltar si es el contenedor de eventos o una zona vacía
+                        if (draggedElement && (target === eventsContainer || !target.hasChildNodes())) {
+                            target.appendChild(draggedElement);
+                        }
                     });
                 });
             }
-            
-            checkBtn.addEventListener('click', () => {
+
+            // --- 5. MODO MÓVIL: TAP-TO-SELECT ---
+            function initMobileTap() {
+                let selectedItem = null;
+
+                document.body.addEventListener('click', (e) => {
+                    const target = e.target;
+
+                    // Caso 1: Tocar una tarjeta de evento
+                    if (target.classList.contains('event-card')) {
+                        if (selectedItem) {
+                            selectedItem.classList.remove('selected');
+                        }
+                        selectedItem = (selectedItem === target) ? null : target;
+                        if (selectedItem) {
+                            selectedItem.classList.add('selected');
+                        }
+                    } 
+                    // Caso 2: Tocar una zona para soltar válida con un item seleccionado
+                    else if (selectedItem && target.classList.contains('drop-zone') && !target.hasChildNodes()) {
+                        target.appendChild(selectedItem);
+                        selectedItem.classList.remove('selected');
+                        selectedItem = null;
+                    }
+                    // Caso 3: Tocar el contenedor de eventos para devolver el item
+                    else if (selectedItem && target === eventsContainer) {
+                        eventsContainer.appendChild(selectedItem);
+                        selectedItem.classList.remove('selected');
+                        selectedItem = null;
+                    }
+                     // Caso 4: Tocar en cualquier otro sitio para cancelar
+                    else if (selectedItem) {
+                        selectedItem.classList.remove('selected');
+                        selectedItem = null;
+                    }
+                });
+            }
+
+            // --- 6. LÓGICA DE VALIDACIÓN Y REINICIO ---
+            function checkAnswers() {
                 const dropZones = document.querySelectorAll('.drop-zone');
                 let correctCount = 0;
 
@@ -293,9 +404,13 @@
                 resultText.textContent = `Obtuviste ${correctCount} de ${quizData.length} aciertos.`;
                 checkBtn.style.display = 'none';
                 resetBtn.style.display = 'inline-block';
-            });
+            }
 
+            // --- 7. ASIGNACIÓN DE EVENTOS A BOTONES ---
+            checkBtn.addEventListener('click', checkAnswers);
             resetBtn.addEventListener('click', setupQuiz);
+
+            // Iniciar el quiz
             setupQuiz();
         });
     </script>
