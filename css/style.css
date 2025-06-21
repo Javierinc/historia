@@ -11,7 +11,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: #f8f9fa; /* Fondo gris muy claro */
     color: #343a40;
     display: flex;
@@ -44,6 +44,19 @@ header.main-header {
     text-align: center;
     width: 100%;
     z-index: 10;
+}
+
+.logo-img {
+    height: 45px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        height: 35px;
+    }
 }
 
 main {

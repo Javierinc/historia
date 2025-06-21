@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gimnasio 🧠 - La Conquista de Chile</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --header-height: 75px;
@@ -16,7 +16,7 @@
             overflow-x: hidden;
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: #f8f9fa;
             color: #212529;
             padding-top: var(--header-height);
@@ -35,14 +35,26 @@
             padding: 0 2rem;
             z-index: 1000;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
+        .fixed-header .site-title {
+            text-align: center;
+        }
         .fixed-header .site-title a {
-            font-size: 1.2rem;
-            font-weight: 700;
             text-decoration: none;
             color: #2c3e50;
+        }
+        .logo-img {
+            height: 45px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 35px;
+            }
         }
         .fixed-header .topic-title {
             font-size: 1.1rem;
@@ -117,8 +129,11 @@
 </head>
 <body>
     <header class="fixed-header">
-        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
-        <div class="topic-title">Gimnasio 🧠</div>
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
     </header>
 
     <main>

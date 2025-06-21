@@ -5,21 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tres en Línea</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --header-height: 75px; }
+        :root { 
+            --header-height: 75px; 
+        }
         html, body {
-            height: 100%; margin: 0; overflow-x: hidden; background-color: #f8f9fa;
+            height: 100%; 
+            margin: 0; 
+            overflow-x: hidden; 
+            background-color: #f8f9fa;
         }
         body {
-            font-family: 'Inter', sans-serif; padding-top: var(--header-height); display: flex; flex-direction: column; align-items: center;
+            font-family: 'Montserrat', sans-serif; 
+            padding-top: var(--header-height); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
         }
         .fixed-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
-            background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            padding: 0 2rem; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: var(--header-height);
+            background-color: #ffffff; 
+            border-bottom: 1px solid #dee2e6; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem; 
+            z-index: 1000; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
         }
-        .fixed-header .site-title a { font-size: 1.2rem; font-weight: 700; text-decoration: none; color: #2c3e50; }
+        .fixed-header .site-title {
+            text-align: center;
+        }
+        .fixed-header .site-title a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .logo-img {
+            height: 45px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 35px;
+            }
+        }
         .fixed-header .topic-title { font-size: 1.1rem; font-weight: 500; color: #6c757d; }
         
         main { flex-grow: 1; padding: 1rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -107,8 +143,11 @@
 </head>
 <body>
     <header class="fixed-header">
-        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
-        <div class="topic-title">Juego: Tres en Línea</div>
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
     </header>
 
     <main>
