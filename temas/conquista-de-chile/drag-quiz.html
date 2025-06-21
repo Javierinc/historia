@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop: Hitos de la Conquista</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --header-height: 75px; }
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #f8f9fa;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            padding-top: var(--header-height);
+            display: flex;
+            flex-direction: column;
+        }
+        .fixed-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
+        }
+        .fixed-header .site-title a { font-size: 1.2rem; font-weight: 700; text-decoration: none; color: #2c3e50; }
+        .fixed-header .topic-title { font-size: 1.1rem; font-weight: 500; color: #6c757d; }
+        
+        main { flex-grow: 1; padding: 2rem 1rem; }
+        .container { max-width: 1000px; margin: auto; background-color: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        .quiz-instructions { text-align: center; margin-bottom: 2rem; }
+        
+        .quiz-area { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; }
+        
+        #items-container {
+            padding: 1rem;
+            border: 2px dashed #e0e0e0;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .draggable-item {
+            padding: 0.75rem;
+            background-color: #3498db;
+            color: white;
+            border-radius: 0.25rem;
+            cursor: grab;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .draggable-item:hover { background-color: #2980b9; }
+        .draggable-item.dragging { opacity: 0.5; cursor: grabbing; box-shadow: 0 8px 15px rgba(0,0,0,0.2); }
+        
+        #descriptions-container { display: flex; flex-direction: column; gap: 1rem; }
+        .description-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+        .drop-zone {
+            height: 55px;
+            width: 200px;
+            min-width: 200px;
+            border: 2px dashed #bdc3c7;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .drop-zone.drag-over { background-color: #ecf0f1; border-color: #3498db; }
+        .drop-zone .draggable-item { cursor: default; }
+
+        .description-text { flex-grow: 1; color: #34495e; }
+        
+        .actions { text-align: center; margin-top: 2rem; }
+        .action-btn { background-color: #2ecc71; color: white; padding: 0.7rem 1.5rem; border-radius: 0.25rem; font-weight: 600; border: none; cursor: pointer; }
+        .action-btn:hover { background-color: #27ae60; }
+        .action-btn.reset { background-color: #e74c3c; }
+        .action-btn.reset:hover { background-color: #c0392b; }
+
+        .drop-zone.correct { border: 2px solid #2ecc71; }
+        .drop-zone.incorrect { border: 2px solid #e74c3c; }
+        .drop-zone.correct .draggable-item { background-color: #2ecc71; }
+        .drop-zone.incorrect .draggable-item { background-color: #e74c3c; }
+        #result-text { margin-top: 1rem; font-size: 1.25rem; font-weight: 600; }
+
+        footer { text-align: center; padding: 1rem; margin-top: 2rem; color: #7f8c8d; }
+
+        @media (max-width: 768px) {
+            .quiz-area { grid-template-columns: 1fr; }
+            #items-container { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .drop-zone { width: 150px; min-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
+        <div class="topic-title">Drag & Drop Quiz</div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="quiz-instructions">
+                <h1 class="text-3xl font-bold mb-2">Relaciona el Concepto</h1>
+                <p class="text-gray-600">Arrastra cada personaje o hecho de la izquierda a su descripción correcta en la derecha.</p>
+            </div>
+
+            <div class="quiz-area">
+                <div id="items-container">
+                    <!-- Estos elementos se insertarán con JS para poder barajarlos -->
+                </div>
+                <div id="descriptions-container">
+                    <!-- Y estos también -->
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="checkBtn" class="action-btn">Revisar Respuestas</button>
+                <button id="resetBtn" class="action-btn reset" style="display: none;">Intentar de Nuevo</button>
+                <p id="result-text"></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <a href="gimnasio.html" class="text-blue-600 hover:underline">← Volver al Gimnasio de Pruebas</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizData = [
+                { id: 'valdivia', text: 'Pedro de Valdivia', description: 'Fundó Santiago en 1541 y lideró la conquista de Chile.' },
+                { id: 'almagro', text: 'Diego de Almagro', description: 'Realizó la primera expedición a Chile, pero regresó a Perú decepcionado.' },
+                { id: 'lautaro', text: 'Lautaro', description: 'Líder mapuche que venció a Valdivia en la Batalla de Tucapel.' },
+                { id: 'curalaba', text: 'Desastre de Curalaba', description: 'Gran victoria mapuche en 1598 que frenó la expansión española.' },
+                { id: 'santiago', text: 'Fundación de Santiago', description: 'Hito ocurrido el 12 de febrero de 1541 en el valle del río Mapocho.' },
+                { id: 'suarez', text: 'Inés de Suárez', description: 'Única mujer española en la expedición de Valdivia, clave en la defensa de Santiago.' },
+                { id: 'encomienda', text: 'La Encomienda', description: 'Sistema de trabajo forzado impuesto a los indígenas a cambio de "protección".' },
+                { id: 'michimalonco', text: 'Michimalonco', description: 'Líder picunche que organizó el ataque y destrucción de Santiago en 1541.' }
+            ];
+
+            const itemsContainer = document.getElementById('items-container');
+            const descriptionsContainer = document.getElementById('descriptions-container');
+            const checkBtn = document.getElementById('checkBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const resultText = document.getElementById('result-text');
+
+            function shuffle(array) {
+                return array.sort(() => Math.random() - 0.5);
+            }
+
+            function setupQuiz() {
+                const shuffledItems = shuffle([...quizData]);
+                const shuffledDescriptions = shuffle([...quizData]);
+
+                itemsContainer.innerHTML = '';
+                descriptionsContainer.innerHTML = '';
+                resultText.textContent = '';
+                checkBtn.style.display = 'inline-block';
+                resetBtn.style.display = 'none';
+
+                shuffledItems.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.id = `item-${item.id}`;
+                    itemEl.dataset.id = item.id;
+                    itemEl.className = 'draggable-item';
+                    itemEl.draggable = true;
+                    itemEl.textContent = item.text;
+                    itemsContainer.appendChild(itemEl);
+                });
+
+                shuffledDescriptions.forEach(desc => {
+                    const descBox = document.createElement('div');
+                    descBox.className = 'description-box';
+                    
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'drop-zone';
+                    dropZone.dataset.targetId = desc.id;
+
+                    const descText = document.createElement('p');
+                    descText.className = 'description-text';
+                    descText.textContent = desc.description;
+
+                    descBox.appendChild(dropZone);
+                    descBox.appendChild(descText);
+                    descriptionsContainer.appendChild(descBox);
+                });
+
+                addDragAndDropListeners();
+            }
+
+            function addDragAndDropListeners() {
+                const draggables = document.querySelectorAll('.draggable-item');
+                const dropZones = document.querySelectorAll('.drop-zone');
+                let draggingItem = null;
+                let originalZone = null;
+
+                // --- Eventos de Ratón (Desktop) ---
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('dragstart', (e) => {
+                        draggingItem = e.target;
+                        setTimeout(() => e.target.style.display = 'none', 0);
+                    });
+                    draggable.addEventListener('dragend', (e) => {
+                        setTimeout(() => {
+                            draggingItem.style.display = 'block';
+                            draggingItem = null;
+                        }, 0);
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', e => {
+                        e.preventDefault();
+                        if (!zone.children.length) {
+                           zone.classList.add('drag-over');
+                        }
+                    });
+                     zone.addEventListener('dragleave', () => {
+                        zone.classList.remove('drag-over');
+                    });
+                    zone.addEventListener('drop', e => {
+                        e.preventDefault();
+                        zone.classList.remove('drag-over');
+                        if (zone.children.length > 0) return;
+                        if (draggingItem) {
+                            zone.appendChild(draggingItem);
+                        }
+                    });
+                });
+                
+                itemsContainer.addEventListener('dragover', e => {
+                    e.preventDefault();
+                });
+                itemsContainer.addEventListener('drop', e => {
+                    e.preventDefault();
+                    if(draggingItem) {
+                       itemsContainer.appendChild(draggingItem);
+                    }
+                });
+
+                // --- Eventos Táctiles (Móvil) ---
+                let touchElement = null;
+                let clone = null;
+                
+                draggables.forEach(draggable => {
+                    draggable.addEventListener('touchstart', (e) => {
+                        if (e.target.classList.contains('draggable-item')) {
+                            touchElement = e.target;
+                            originalZone = touchElement.parentElement;
+                            
+                            clone = touchElement.cloneNode(true);
+                            clone.style.position = 'absolute';
+                            clone.style.zIndex = '1000';
+                            clone.style.opacity = '0.8';
+                            document.body.appendChild(clone);
+                            
+                            touchElement.style.opacity = '0.5';
+
+                            let touch = e.touches[0];
+                            moveAt(touch.pageX, touch.pageY);
+                        }
+                    }, {passive: false});
+                });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (clone) {
+                        e.preventDefault();
+                        let touch = e.touches[0];
+                        moveAt(touch.pageX, touch.pageY);
+
+                        clone.style.display = 'none';
+                        let elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                        clone.style.display = 'block';
+
+                        dropZones.forEach(z => z.classList.remove('drag-over'));
+                        if (elemBelow) {
+                            let dropZoneBelow = elemBelow.closest('.drop-zone');
+                            if (dropZoneBelow && !dropZoneBelow.children.length) {
+                                dropZoneBelow.classList.add('drag-over');
+                            }
+                        }
+                    }
+                }, {passive: false});
+
+                document.addEventListener('touchend', (e) => {
+                    if (clone) {
+                        clone.style.display = 'none';
+                        let touch = e.changedTouches[0];
+                        let elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                        clone.remove();
+                        clone = null;
+
+                        let dropZoneBelow = elemBelow ? elemBelow.closest('.drop-zone') : null;
+
+                        if (dropZoneBelow && !dropZoneBelow.children.length) {
+                            dropZoneBelow.appendChild(touchElement);
+                        } else {
+                            // Si no se suelta en una zona válida, se devuelve al contenedor de origen
+                            originalZone.appendChild(touchElement);
+                        }
+                        
+                        touchElement.style.opacity = '1';
+                        touchElement = null;
+                        dropZones.forEach(z => z.classList.remove('drag-over'));
+                    }
+                });
+
+                function moveAt(pageX, pageY) {
+                    if (clone) {
+                        clone.style.left = pageX - clone.offsetWidth / 2 + 'px';
+                        clone.style.top = pageY - clone.offsetHeight / 2 + 'px';
+                    }
+                }
+            }
+
+            checkBtn.addEventListener('click', () => {
+                const dropZones = document.querySelectorAll('.drop-zone');
+                let correctCount = 0;
+
+                dropZones.forEach(zone => {
+                    const droppedItem = zone.querySelector('.draggable-item');
+                    zone.classList.remove('correct', 'incorrect');
+
+                    if (droppedItem) {
+                        const targetId = zone.dataset.targetId;
+                        const droppedId = droppedItem.dataset.id;
+                        if (targetId === droppedId) {
+                            zone.classList.add('correct');
+                            correctCount++;
+                        } else {
+                            zone.classList.add('incorrect');
+                        }
+                    } else {
+                        zone.classList.add('incorrect'); // Vacío es incorrecto
+                    }
+                });
+                
+                resultText.textContent = `Obtuviste ${correctCount} de ${quizData.length} respuestas correctas.`;
+                checkBtn.style.display = 'none';
+                resetBtn.style.display = 'inline-block';
+            });
+
+            resetBtn.addEventListener('click', setupQuiz);
+
+            setupQuiz();
+        });
+    </script>
+</body>
+</html> 

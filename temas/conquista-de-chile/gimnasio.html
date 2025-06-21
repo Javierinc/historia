@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gimnasio de Pruebas - La Conquista de Chile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-height: 75px;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            padding-top: var(--header-height);
+            display: flex;
+            flex-direction: column;
+        }
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .fixed-header .site-title a {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .fixed-header .topic-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        main {
+            flex-grow: 1;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .quiz-card {
+            border: 1px solid #e9ecef;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+        }
+        .quiz-card h3 {
+            color: #2c3e50;
+        }
+        .quiz-card p {
+            color: #6c757d;
+        }
+        .start-btn {
+            display: inline-block;
+            background-color: #16a085;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            margin-top: 1.5rem;
+        }
+        .start-btn:hover {
+            background-color: #117a65;
+        }
+        footer {
+            background-color: #34495e;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+        .back-link {
+             margin-top: 2rem;
+             display: inline-block;
+             color: #3498db;
+             text-decoration: none;
+             font-weight: 600;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
+        <div class="topic-title">Gimnasio de Pruebas</div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1 class="text-3xl md:text-4xl font-extrabold mb-4">Gimnasio de Pruebas</h1>
+            <p class="text-lg text-gray-600 mb-8">¡Aquí puedes poner a prueba tus conocimientos sobre la Conquista de Chile!</p>
+            
+            <div class="quiz-card">
+                <h3 class="text-2xl font-bold mb-2">Quiz: La Conquista de Chile</h3>
+                <p>10 preguntas de opción múltiple para ver cuánto aprendiste.</p>
+                <a href="quiz.html" class="start-btn">¡Comenzar Prueba!</a>
+            </div>
+
+            <div class="quiz-card mt-6">
+                <h3 class="text-2xl font-bold mb-2">Drag & Drop: Hitos y Personajes</h3>
+                <p>Arrastra y relaciona los conceptos clave de la Conquista de Chile.</p>
+                <a href="drag-quiz.html" class="start-btn" style="background-color: #3498db;">¡Comenzar Prueba!</a>
+            </div>
+
+            <div class="quiz-card mt-6">
+                <h3 class="text-2xl font-bold mb-2">Línea de Tiempo Interactiva</h3>
+                <p>Ordena los eventos históricos en el orden cronológico correcto.</p>
+                <a href="timeline-quiz.html" class="start-btn" style="background-color: #9b59b6;">¡Comenzar Prueba!</a>
+            </div>
+
+            <div class="quiz-card mt-6">
+                <h3 class="text-2xl font-bold mb-2">Juego sorpresa 😱</h3>
+                <p>Para relajarse después de estudiar. ¿Podrás ganarle a la máquina?</p>
+                <a href="tictactoe.html" class="start-btn" style="background-color: #1abc9c;">¡Jugar!</a>
+            </div>
+
+            <!-- Aquí se pueden añadir tarjetas para más quizzes en el futuro -->
+
+            <a href="index.html" class="back-link mt-8">← Volver al tema</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Historia para Exploradores. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html> 

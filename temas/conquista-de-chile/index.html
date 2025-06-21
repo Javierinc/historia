@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Conquista de Chile - Historia para Exploradores</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-height: 75px; /* Definimos la altura del header como una variable */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            padding-top: var(--header-height); /* Padding para dejar espacio para el header fijo */
+        }
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .fixed-header .site-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .fixed-header .site-title a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .fixed-header .topic-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .container-wrapper {
+            padding: 2rem 1rem;
+        }
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border: 1px solid #dee2e6;
+            margin: 0 auto;
+        }
+        .topic-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .topic-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .title-text {
+            color: #2c3e50;
+        }
+        .underline-effect {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+        .underline-effect::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: #5dade2;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 1rem 0 0 0;
+            border-top: 1px solid #e9ecef;
+            width: 100%;
+        }
+        .nav-btn {
+            background-color: #34495e;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: none;
+            font-size: 1rem;
+            border: none;
+            text-decoration: none;
+        }
+        .nav-btn:hover {
+            background-color: #2c3e50;
+            transform: translateY(-2px);
+        }
+        .nav-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .topic-indicator {
+            text-align: center;
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            word-break: break-word;
+        }
+        th {
+            background-color: #f8f9fa;
+        }
+        @media (max-width: 768px) {
+            .fixed-header {
+                padding: 0 1rem;
+            }
+            .fixed-header .topic-title {
+                display: none; /* Ocultar título del tema en móvil para más espacio */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="fixed-header">
+        <div class="site-title"><a href="../../index.html">Historia para Exploradores</a></div>
+        <div class="topic-title">La Conquista de Chile</div>
+    </header>
+
+    <div class="container-wrapper">
+        <div class="main-container">
+
+            <!-- Contenidos del Tema -->
+            <div id="topic-0" class="topic-content active">
+                <div class="card">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-6 title-text">
+                        ¡Descubriendo Chile! 🗺️✨
+                    </h1>
+                    <p class="text-gray-800 mb-4">
+                        ¡Hola, exploradora! Te invito a un viaje increíble para descubrir cómo era Chile hace muchísimos años y cómo llegaron los primeros europeos. ¡Prepárate para la aventura!
+                    </p>
+                    <div class="text-center my-6">
+                        <a href="gimnasio.html" class="nav-btn" style="text-decoration: none; background-color: #27ae60; display: inline-block; padding: 0.8rem 2rem;">
+                            🧠 Gimnasio de Pruebas
+                        </a>
+                    </div>
+                    <p class="text-gray-700">
+                        En este tema, vamos a explorar la <strong>Conquista de Chile</strong>. Es una parte súper importante de nuestra historia, donde dos mundos se encontraron: el de los pueblos originarios que ya vivían aquí y el de los españoles que llegaron desde muy lejos.
+                    </p>
+                    <hr class="my-6 border-gray-300">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-blue-700 underline-effect">
+                        Un Gran Viaje: La Conquista de América 🚢
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Imagina que hace más de 500 años, los europeos no conocían nuestro continente, América. ¡Creían que el mundo era mucho más pequeño! Pero gracias a exploradores valientes como Cristóbal Colón, ¡se dieron cuenta de que había un mundo nuevo lleno de misterios por descubrir!
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        España, un país en Europa, quería explorar y encontrar nuevas rutas para comerciar y riquezas. Así, muchos aventureros, a los que llamamos "conquistadores", cruzaron el océano en grandes barcos para llegar a estas tierras lejanas.
+                    </p>
+                    <p class="text-gray-700">
+                        Al llegar, encontraron a muchísimos pueblos indígenas que ya vivían aquí desde hacía miles de años, con sus propias culturas, idiomas y formas de vida. A veces, las cosas fueron pacíficas, pero muchas otras, hubo grandes batallas y cambios para todos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 2: Diego de Almagro -->
+            <div id="topic-1" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        El Primer Viaje a Chile: Diego de Almagro 🥶
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        El primer español en intentar llegar a Chile fue <strong>Diego de Almagro</strong>. Él era un conquistador que estaba en Perú, donde ya habían encontrado mucho oro.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        En <strong>1535</strong>, Almagro escuchó historias de que al sur de Perú, en un lugar llamado Chile, había muchísimas riquezas. ¡Así que decidió ir a buscarlas! Partió con un ejército enorme, ¡más de 500 españoles y miles de indígenas de Perú!
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Su viaje fue súper difícil. Cruzaron la <strong class="text-red-600">Cordillera de los Andes</strong> en pleno invierno. ¡Hacía tanto frío que muchos soldados y animales murieron congelados! Fue una travesía muy dura.
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Cuando finalmente llegaron a lo que hoy es Chile (por la zona de Copiapó y el Valle del Aconcagua), Almagro y sus hombres buscaron el oro y las riquezas de las que les habían hablado. Pero, ¿adivina qué? ¡No encontraron el oro que esperaban!
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Además, tuvieron que enfrentarse a algunos pueblos indígenas, como los <strong>Diaguitas</strong> y <strong>Picunches</strong>, que defendieron sus tierras.
+                    </p>
+                    <p class="text-gray-700">
+                        Así que, decepcionado y con muchas pérdidas, Diego de Almagro decidió regresar a Perú en <strong>1537</strong>, esta vez por el desierto de Atacama, que también fue muy complicado. Él le dijo a la gente que Chile era una tierra "pobre y desolada". 😢
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 3: Pedro de Valdivia -->
+            <div id="topic-2" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        El Fundador de Chile: Pedro de Valdivia ⚔️
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Aunque Almagro se dio por vencido, hubo otro español que creyó en Chile: <strong>Pedro de Valdivia</strong>. Él era un soldado muy valiente y astuto. A pesar de que todos decían que Chile no valía la pena, él pidió permiso para conquistarla.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        En <strong>1540</strong>, Valdivia partió desde Perú con un grupo mucho más pequeño que el de Almagro, ¡solo unos 150 hombres y una mujer, Inés de Suárez! Decidió ir por el desierto de Atacama, ¡que era igual de difícil!
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Valdivia y su grupo eran muy decididos. A pesar de las dificultades del desierto, lograron llegar al valle del río Mapocho.
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        ¡Y aquí un hito súper importante! El <strong class="text-purple-700">12 de febrero de 1541</strong>, Pedro de Valdivia fundó la ciudad de <strong class="text-purple-700">Santiago de la Nueva Extremadura</strong>, ¡que hoy es la capital de Chile, Santiago!
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Desde Santiago, Valdivia siguió explorando y fundando otras ciudades importantes, como La Serena, Concepción, Villarrica y Valdivia. Así, poco a poco, los españoles se fueron estableciendo en el territorio chileno.
+                    </p>
+                    <p class="text-gray-700">
+                        Él sabía que Chile no tenía tanto oro como Perú, pero era una tierra fértil, con muchos recursos y un clima perfecto para la agricultura y la ganadería. ¡Por eso decidió quedarse y construir un nuevo reino!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 4: Resistencia Indígena -->
+            <div id="topic-3" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        La Resistencia Indígena: Michimalonco y la Identidad Mapuche 💪
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Pero la historia no es solo de los españoles. ¡Los pueblos indígenas de Chile, especialmente los <strong>Mapuches</strong> (que significa "gente de la tierra"), fueron muy valientes y defendieron su territorio con gran fuerza!
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        Los Mapuches tenían una forma de vida muy ligada a la <strong class="text-green-700">naturaleza y la tierra (mapu)</strong>. Para ellos, la tierra no era algo que se podía comprar o vender, ¡era parte de su identidad! Vivían en comunidades organizadas y valoraban mucho su <strong class="text-blue-700">libertad y autonomía</strong>.
+                    </p>
+                    <p class="text-gray-700 mb-2">
+                        Una de las primeras muestras de su fuerza fue el ataque a Santiago. En <strong class="text-red-700">septiembre de 1541</strong>, el valiente líder <strong class="text-red-700">Michimalonco</strong>, de los Picunches (un grupo de Mapuches), ¡organizó un gran ataque y casi destruye Santiago por completo! Fue un momento de mucho miedo para los españoles, que apenas lograron defenderse. Este ataque mostró que los indígenas no se rendirían fácilmente.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 5: Batallas Clave -->
+            <div id="topic-4" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Batallas Clave de la Resistencia Mapuche 🏹
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Después del ataque a Santiago, la lucha entre españoles y Mapuches se volvió muy intensa. Los Mapuches demostraron ser guerreros muy hábiles:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-800 space-y-2 ml-4">
+                        <li>
+                            <strong class="text-orange-700">Batalla de Tucapel (1553):</strong> ¡Una de las más famosas! Los Mapuches, liderados por el joven y astuto <strong class="text-red-700">Lautaro</strong> y el fuerte <strong class="text-red-700">Caupolicán</strong>, lograron una gran victoria. En esta batalla, lamentablemente, Pedro de Valdivia fue capturado y murió. Fue un golpe muy duro para los españoles y demostró que los Mapuches no iban a dejar que les quitaran sus tierras sin luchar.
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">Desastre de Curalaba (1598):</strong> ¡Otra gran victoria mapuche! En este ataque sorpresa, los Mapuches lograron expulsar a los españoles de muchos fuertes y ciudades al sur del río Bío Bío. Este evento fue tan importante que marcó el fin de la etapa de conquista y obligó a los españoles a cambiar su estrategia.
+                        </li>
+                    </ul>
+                    <p class="text-gray-800 mt-4">
+                        La resistencia Mapuche duró muchísimos años, ¡por más de 300 años! Se conoce como la <strong>Guerra de Arauco</strong>. Los Mapuches aprendieron a usar las armas de los españoles y se adaptaron a sus tácticas, ¡lo que los hizo muy difíciles de vencer!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 6: Guerra de Arauco -->
+            <div id="topic-5" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Las Tres Etapas de la Guerra de Arauco 📖
+                    </h2>
+                    <p class="text-gray-700 mb-4">
+                        La Guerra de Arauco no fue una batalla continua, sino una serie de enfrentamientos y momentos distintos. Los historiadores la han dividido en tres grandes etapas:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>
+                            <strong class="text-orange-700">1. Guerra Ofensiva (1541 - 1612):</strong>
+                            <p class="ml-6 mb-1">
+                                Esta etapa fue cuando los españoles intentaron ir más al sur de Chile para conquistar esas tierras. Hubo batallas importantes y se fundaron ciudades, pero los Mapuches, liderados por valientes toquis como <strong class="text-red-700">Lautaro</strong> y <strong class="text-red-700">Pelantaro</strong>, las destruyeron muchas veces. Los españoles hacían "campeadas" para capturar indígenas como esclavos, y los Mapuches respondían con tácticas de guerrilla.
+                            </p>
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">2. Guerra Defensiva (1612 - 1626):</strong>
+                            <p class="ml-6 mb-1">
+                                Después de tantas pérdidas, un sacerdote jesuita llamado <strong class="text-blue-700">Luis de Valdivia</strong> propuso una nueva idea: en vez de atacar, ¡había que defenderse! La idea era no cruzar el río Bío Bío (que se convirtió en una frontera) y evangelizar a los Mapuches con amor. Pero esta idea no funcionó muy bien, porque muchos desconfiaban en ambos bandos.
+                            </p>
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">3. Frontera y Parlamentos (Siglo XVII en adelante):</strong>
+                            <p class="ml-6 mb-1">
+                                En esta etapa se estableció una <strong class="text-green-700">frontera clara en el río Bío Bío</strong>. Lo más interesante fueron los <strong class="text-blue-700">Parlamentos</strong>: grandes reuniones donde líderes españoles y caciques mapuches se juntaban para conversar, hacer acuerdos de paz, intercambiar regalos y resolver problemas. Fue una forma de intentar vivir en paz.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tópico 7: Descenso Demográfico -->
+            <div id="topic-6" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        El Descenso Demográfico Indígena: Causas y Efectos 📉
+                    </h2>
+                    <p class="text-gray-700 mb-2">
+                        Uno de los efectos más devastadores de la Conquista fue la enorme disminución de la población indígena. ¡Imagina que muchísimas personas desaparecieron! Las razones de esta tristeza fueron varias y se mezclaron entre sí:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>
+                            <strong class="text-orange-700">Nuevas Enfermedades:</strong> Esta fue la causa más grande. Los europeos trajeron enfermedades como la viruela, el sarampión o la gripe. ¡Los indígenas nunca las habían conocido y sus cuerpos no tenían defensas para luchar contra ellas!
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">Trabajo Forzado:</strong> Los españoles obligaron a los indígenas a trabajar muy duro en sistemas como la <strong>Encomienda</strong>. Las condiciones eran terribles, con mucho maltrato. Esto los agotaba, los enfermaba y los llevaba a la muerte.
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">Guerra y Conflictos:</strong> Las batallas constantes con los españoles también causaron muchas muertes y destruyeron comunidades enteras.
+                        </li>
+                         <li>
+                            <strong class="text-orange-700">Cambios en su Vida:</strong> La llegada de los españoles cambió por completo la forma de vida de los indígenas. Perdieron sus tierras, sus comunidades se desorganizaron y la violencia era constante. Todo esto afectó mucho su ánimo y su capacidad de tener hijos.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tópico 8: Tabla de Causas -->
+            <div id="topic-7" class="topic-content">
+                <div class="card">
+                     <h4 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Causas del Descenso Demográfico
+                    </h4>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Causa Principal</th>
+                                    <th>Explicación</th>
+                                    <th>Consecuencia Directa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Nuevas Enfermedades</td>
+                                    <td>Indígenas sin defensas a enfermedades europeas (viruela, sarampión).</td>
+                                    <td>Epidemias masivas, alta mortalidad.</td>
+                                </tr>
+                                <tr>
+                                    <td>Trabajo Forzado</td>
+                                    <td>Explotación en la encomienda, condiciones inhumanas.</td>
+                                    <td>Agotamiento, muerte prematura.</td>
+                                </tr>
+                                <tr>
+                                    <td>Guerra y Conflictos</td>
+                                    <td>Enfrentamientos directos, represalias, destrucción.</td>
+                                    <td>Muertes en combate, desplazamientos.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tópico 9: Formas de Trabajo -->
+            <div id="topic-8" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Formas de Trabajo Impuestas: Encomienda y Esclavitud ⛓️
+                    </h2>
+                     <p class="text-gray-700 mb-2">
+                        Para explotar los recursos y organizar el trabajo, los españoles crearon formas de obligar a los indígenas a trabajar para ellos:
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>
+                            <strong class="text-orange-700">La Encomienda:</strong> Era un sistema en el que el rey de España "encargaba" un grupo de indígenas a un conquistador. Este debía "protegerlos" y enseñarles la religión, ¡pero a cambio, los indígenas tenían que trabajar para él! En la práctica, fue una forma de explotación muy dura, casi como si fueran siervos.
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">La Esclavitud Indígena:</strong> Aunque la Corona española intentó que no hubiera esclavos indígenas, en Chile fue diferente. En <strong class="text-red-700">1608</strong>, una ley permitió hacer esclavos a los Mapuches capturados en guerra. Esto provocó un triste ciclo de violencia: los españoles hacían "malocas" (ataques para capturar indígenas) y los Mapuches respondían con "malones" (ataques para robar).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tópico 10: Nuevo Orden -->
+            <div id="topic-9" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        El Nuevo Orden y el Ejército Profesional 🌍
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Para controlar la frontera, se creó un <strong class="text-blue-700">ejército profesional y permanente</strong> a inicios del siglo XVII. Esto marcó una <strong class="text-green-700">frontera muy definida</strong> en el río Bío-Bío.
+                    </p>
+                    <p class="text-gray-700">
+                        Se formó un <strong class="text-yellow-700">nuevo orden colonial</strong> y Chile pasó a ser una <strong class="text-yellow-700">Capitanía General</strong> del Imperio Español.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tópico 11: Mezcla de Culturas -->
+            <div id="topic-10" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Mezcla de Culturas: Sincretismo y Mestizaje ✨
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        A pesar de las guerras, con el tiempo hubo una <strong class="text-purple-700">mezcla de culturas</strong>. A esto lo llamamos <strong class="text-purple-700">sincretismo cultural</strong> y <strong class="text-purple-700">mestizaje</strong>.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>
+                            <strong class="text-orange-700">¿Qué es el Sincretismo Cultural?</strong>
+                            <p class="ml-6 mb-1">
+                                ¡Es como cuando dos o más culturas se juntan y de esa mezcla nace algo nuevo! En Chile, por ejemplo, los españoles trajeron el trigo y los Mapuches les enseñaron sobre el maíz y la papa. Así, la comida y las formas de vida se mezclaron, creando nuevas costumbres y palabras.
+                            </p>
+                        </li>
+                        <li>
+                            <strong class="text-orange-700">¿Qué es el Mestizaje?</strong>
+                            <p class="ml-6 mb-1">
+                                El mestizaje es la <strong class="text-blue-700">mezcla de personas de diferentes grupos étnicos</strong>. En la época de la Conquista y la Colonia, muchos españoles e indígenas tuvieron hijos, y estos niños fueron llamados <strong class="text-green-700">mestizos</strong>. Con el tiempo, también llegaron personas de África. El mestizaje fue muy importante porque dio origen a la mayor parte de la población de Chile. ¡Es parte fundamental de nuestra identidad!
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tópico 12: Sociedad Colonial -->
+            <div id="topic-11" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        La Sociedad Colonial en Chile 🏛️
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Con el nuevo orden colonial, la sociedad se organizó de una forma muy particular. ¡Era como una pirámide!
+                    </p>
+                    <ul class="list-disc list-inside text-gray-800 space-y-2 ml-4">
+                        <li><strong class="text-red-700">Arriba:</strong> Los <strong>españoles</strong> nacidos en España, que tenían los puestos más importantes.</li>
+                        <li><strong class="text-orange-600">Luego:</strong> Los <strong>criollos</strong>, que eran hijos de españoles pero nacidos en América. Tenían poder, pero no tanto como los nacidos en España.</li>
+                        <li><strong class="text-yellow-600">Después:</strong> Los <strong>mestizos</strong>, la mezcla de españoles e indígenas. Eran la mayoría de la población.</li>
+                        <li><strong class="text-green-600">Abajo:</strong> Los <strong>indígenas</strong>, que eran la población originaria, y lamentablemente, los <strong>esclavos</strong> traídos de África.</li>
+                    </ul>
+                    <p class="text-gray-800 mt-4">
+                        Esta estructura marcó cómo vivía la gente, qué derechos tenía y qué trabajos podía hacer. Fue la base de la sociedad chilena por muchos años.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Tópico 13: Fechas Importantes -->
+            <div id="topic-12" class="topic-content">
+                 <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Fechas Clave 🗓️
+                    </h2>
+                    <ul class="list-disc list-inside text-gray-800 space-y-2">
+                        <li><strong class="text-green-700">1492:</strong> Cristóbal Colón llega a América. ¡Comienza la era de la exploración europea!</li>
+                        <li><strong class="text-green-700">1535:</strong> Diego de Almagro inicia su difícil viaje hacia Chile desde Perú.</li>
+                        <li><strong class="text-green-700">12 de febrero de 1541:</strong> Pedro de Valdivia funda Santiago de la Nueva Extremadura.</li>
+                         <li><strong class="text-green-700">Septiembre de 1541:</strong> Michimalonco lidera un gran ataque que casi destruye la recién fundada Santiago.</li>
+                        <li><strong class="text-green-700">1553:</strong> Batalla de Tucapel, donde muere Pedro de Valdivia. Lautaro emerge como un gran líder militar.</li>
+                        <li><strong class="text-green-700">1598:</strong> Desastre de Curalaba, una gran victoria Mapuche que frena la expansión española.</li>
+                        <li><strong class="text-green-700">1608:</strong> Se emite la Real Cédula que permite la esclavitud de indígenas capturados en guerra.</li>
+                        <li><strong class="text-green-700">1612 - 1626:</strong> Periodo de la "Guerra Defensiva" propuesta por el Padre Luis de Valdivia.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tópico 14: Link al Quiz -->
+            <div id="topic-13" class="topic-content">
+                <div class="card text-center">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 title-text underline-effect">
+                        ¡Es Hora de Probar lo que Aprendiste! 🚀
+                    </h2>
+                    <p class="text-lg md:text-xl text-center mb-8 text-gray-700">
+                        Ahora que has completado este viaje por la historia, ¿te atreves a poner a prueba tus conocimientos?
+                    </p>
+                    <a href="quiz.html" class="nav-btn" style="text-decoration: none; background-color: #16a085; display: inline-block; padding: 0.8rem 2rem;">
+                        ¡Ir al Quiz!
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navegación de Tópicos -->
+            <div class="navigation-buttons">
+                <button id="prevBtn" class="nav-btn" disabled>⬅️ Anterior</button>
+                <span id="topicIndicator" class="topic-indicator">Tema 1 de 14</span>
+                <button id="nextBtn" class="nav-btn">Siguiente ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTopic = 0;
+        const topics = document.querySelectorAll('.topic-content');
+        const totalTopics = topics.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const topicIndicator = document.getElementById('topicIndicator');
+
+        function showTopic(index) {
+            topics.forEach((topic, i) => {
+                topic.classList.remove('active');
+            });
+            topics[index].classList.add('active');
+            updateButtons();
+            updateTopicIndicator();
+            window.scrollTo(0, 0); // Vuelve al inicio de la página al cambiar de tópico
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = (currentTopic === 0);
+            nextBtn.disabled = (currentTopic === totalTopics - 1);
+        }
+
+        function updateTopicIndicator() {
+            topicIndicator.textContent = `Tema ${currentTopic + 1} de ${totalTopics}`;
+        }
+
+        function nextTopic() {
+            if (currentTopic < totalTopics - 1) {
+                currentTopic++;
+                showTopic(currentTopic);
+            }
+        }
+
+        function prevTopic() {
+            if (currentTopic > 0) {
+                currentTopic--;
+                showTopic(currentTopic);
+            }
+        }
+
+        prevBtn.addEventListener('click', prevTopic);
+        nextBtn.addEventListener('click', nextTopic);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showTopic(currentTopic);
+        });
+    </script>
+</body>
+</html>
