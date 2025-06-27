@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Colonia en Chile - Historia para Exploradores</title>
+    <!-- Carga de Tailwind CSS para un diseño moderno y responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-height: 75px; /* Definimos la altura del header como una variable */
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            padding-top: var(--header-height); /* Padding para dejar espacio para el header fijo */
+        }
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .fixed-header .site-title {
+            text-align: center;
+        }
+        .fixed-header .site-title a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .logo-img {
+            height: 45px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .fixed-header .topic-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .container-wrapper {
+            padding: 2rem 1rem;
+        }
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+            border: 1px solid #dee2e6;
+            margin: 0 auto;
+        }
+        .topic-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .topic-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card {
+            background-color: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .title-text {
+            color: #2c3e50;
+        }
+        .underline-effect {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+        .underline-effect::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: #5dade2;
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 1rem 0 0 0;
+            border-top: 1px solid #e9ecef;
+            width: 100%;
+        }
+        .nav-btn {
+            background-color: #34495e;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: none;
+            font-size: 1rem;
+            border: none;
+            text-decoration: none;
+        }
+        .nav-btn:hover {
+            background-color: #2c3e50;
+            transform: translateY(-2px);
+        }
+        .nav-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .topic-indicator {
+            text-align: center;
+            font-weight: 600;
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            word-break: break-word;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 700;
+        }
+        @media (max-width: 768px) {
+            .fixed-header {
+                padding: 0 1rem;
+            }
+            .fixed-header .topic-title {
+                display: none; /* Ocultar título del tema en móvil para más espacio */
+            }
+
+            body {
+                /* Añadimos padding-bottom para que el contenido no quede oculto por la barra de navegación fija */
+                padding-bottom: 80px; 
+            }
+
+            .navigation-buttons {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin-top: 0;
+                padding: 0.75rem 1rem;
+                background-color: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border-top: 1px solid #e0e0e0;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+                z-index: 1000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="fixed-header">
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
+    </header>
+
+    <div class="container-wrapper">
+        <div class="main-container">
+            
+            <!-- Tópico 1: ¿Qué fue la Colonia? -->
+            <div id="topic-0" class="topic-content active">
+                <div class="card">
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-6 title-text">
+                        Clase 1: Conociendo la Colonia 🏛️✨
+                    </h1>
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-blue-700 underline-effect">
+                        ¿Qué fue la Colonia en Chile?
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        La Colonia en Chile fue un período extenso de la historia, que se inició en el año 1598 con un evento muy importante llamado la Batalla de Curalaba y finalizó en 1810, cuando Chile comenzó su camino hacia la Independencia con la formación de la primera Junta de Gobierno. Durante todo este tiempo, España, que era un país muy poderoso en Europa, dominó y administró el territorio chileno. Esto significaba que España controlaba todos los aspectos de la vida en Chile: la política, cómo se organizaba la sociedad, la economía, el ejército y hasta la religión.
+                    </p>
+                    <p class="text-gray-700">
+                        La larga duración de la Colonia, que abarcó más de doscientos años, y el hecho de que una colonia es un territorio dominado por una potencia extranjera, nos ayuda a entender por qué la influencia española fue tan profunda y duradera en Chile. Esta situación no fue una casualidad histórica, sino una consecuencia directa de un control tan prolongado y abarcador sobre todos los aspectos de la vida en el territorio. Fue en esta época cuando se formó la sociedad chilena que conocemos hoy, resultado de la mezcla de personas y culturas entre los españoles que llegaron y las diversas comunidades indígenas que ya vivían aquí.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 2: La Sociedad Colonial -->
+            <div id="topic-1" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        La Sociedad Colonial: Una Pirámide de Colores 🎨
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        La sociedad colonial en Chile era muy estricta y se organizaba de una manera que se parecía a una pirámide, dividida en grupos llamados "castas" o "estamentos". El lugar de cada persona en esta pirámide dependía de su origen o nacimiento, es decir, de dónde venía su familia y, en gran medida, del color de su piel. Era extremadamente difícil cambiar de grupo social una vez que se nacía en uno, lo que se conocía como una "pictocracia".
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        En la <strong>cima</strong> de esta pirámide estaban los <strong>Españoles</strong>, también llamados peninsulares. Eran los que tenían más poder, ocupando los cargos más importantes en el gobierno, como funcionarios del rey, o siendo autoridades de la Iglesia Católica. Gozaban de muchos privilegios.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        Justo <strong>debajo</strong> de los españoles se encontraban los <strong>Criollos</strong>. Ellos eran los hijos de españoles, pero habían nacido en América. Aunque poseían muchas tierras y haciendas, lo que les daba un gran poder económico y social, no podían acceder a los cargos políticos más importantes, que estaban reservados para los españoles nacidos en Europa.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                         El grupo más numeroso de la época eran los <strong>Mestizos</strong>. Eran hijos de la mezcla entre españoles e indígenas. No tenían permitido ser militares ni funcionarios públicos. La mayoría trabajaba en el campo como inquilinos (personas que arrendaban una porción de tierra a cambio de sus servicios) o como peones (trabajadores temporales). Sin embargo, algunos mestizos también lograron ser artesanos o comerciantes en las ciudades. Tenían la posibilidad de unirse al clero.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        En la <strong>base</strong> de la pirámide se encontraban los <strong>Indígenas, Esclavos Africanos, Mulatos</strong> (mezcla de español y africano) y <strong>Zambos</strong> (mezcla de africano e indígena). Estos grupos realizaban las tareas más difíciles, como trabajos domésticos o transporte de carga. Los esclavos africanos y sus descendientes eran un grupo minoritario y tenían la posición social más baja.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Grupo Social</th>
+                                    <th>Características y Rol</th>
+                                    <th>Posición en la Sociedad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Españoles</td>
+                                    <td>Funcionarios del rey, autoridades de la Iglesia Católica. Gran poder y privilegios.</td>
+                                    <td>Cúspide (la más alta)</td>
+                                </tr>
+                                <tr>
+                                    <td>Criollos</td>
+                                    <td>Hijos de españoles nacidos en América. Dueños de tierras y haciendas.</td>
+                                    <td>Intermedio (alto)</td>
+                                </tr>
+                                <tr>
+                                    <td>Mestizos</td>
+                                    <td>Hijos de españoles e indígenas. Trabajadores (inquilinos, peones), artesanos, comerciantes.</td>
+                                    <td>Intermedio (bajo)</td>
+                                </tr>
+                                <tr>
+                                    <td>Indígenas, Esclavos Africanos, Mulatos, Zambos</td>
+                                    <td>Trabajadores forzados, tareas domésticas, transporte de carga.</td>
+                                    <td>Base (la más baja)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tópico 3: Vida en la Ciudad y el Campo -->
+            <div id="topic-2" class="topic-content">
+                <div class="card">
+                     <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        La Vida en la Ciudad y el Campo 🏙️🌳
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        La vida en la Colonia estaba marcada por grandes diferencias entre quienes vivían en las ciudades y quienes habitaban el campo. Las ciudades, como <strong>Santiago, Concepción y La Serena</strong>, eran el corazón de la vida para la aristocracia, es decir, los españoles y criollos. Sus casas eran grandes, de un solo piso, con fachadas sencillas, construidas de adobe y pintadas de blanco. Estas viviendas se ubicaban en el centro de la ciudad, cerca de la <strong>Plaza de Armas</strong>, que era el lugar más importante para la vida social y el comercio.
+                    </p>
+                     <p class="text-gray-800 mb-4">
+                        Por otro lado, el <strong>campo</strong> era el lugar donde se desarrollaba la mayor parte de la vida económica y donde vivían los sectores populares. Las <strong>haciendas</strong> eran grandes propiedades dedicadas a la agricultura y la ganadería. En los márgenes de las ciudades o en las zonas rurales, los sectores populares, especialmente los mestizos, vivían en "<strong>ranchos</strong>". Estas eran viviendas pequeñas, a menudo sin puertas, con piso de tierra y muy pocas comodidades.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 4: Rutinas, Alimentación y Vestimenta -->
+            <div id="topic-3" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Un Día en la Colonia ☀️
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Un día cualquiera en el siglo XVII para una familia colonial comenzaba muy temprano, a menudo con la asistencia a misa. Después, tomaban el desayuno y los adultos se dedicaban a sus negocios. La comida principal era a las dos de la tarde. Por la tarde, salían a tomar el fresco. Los niños iban a la escuela, merendaban, rezaban y se acostaban temprano. Los adultos cenaban más tarde, entre las diez y las once.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        La <strong>alimentación</strong> era una mezcla de productos de América y España. Algunos alimentos muy consumidos eran el <strong>charqui</strong> (carne seca), legumbres, <strong>yerba mate</strong>, ají, cereales y papas.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        La <strong>vestimenta</strong> identificaba a cada persona en la sociedad.
+                    </p>
+                    <div class="overflow-x-auto">
+                         <table>
+                            <thead>
+                                <tr>
+                                    <th>Grupo Social</th>
+                                    <th>Descripción de Vestimenta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Aristocracia</td>
+                                    <td>Ropa elegante de telas caras, vestidos largos y anchos (mujeres), pantalones ajustados, sacos y sombreros (hombres). Moda europea.</td>
+                                </tr>
+                                <tr>
+                                    <td>Clase Media/Huasos</td>
+                                    <td>Mantas, pantalones y sombreros (hombres); vestidos largos y sombreros (mujeres).</td>
+                                </tr>
+                                <tr>
+                                    <td>Sectores Populares/Indígenas</td>
+                                    <td>Ropa sencilla, camisas grandes de materiales reciclados o de baja calidad. Vestimentas tradicionales indígenas.</td>
+                                </tr>
+                                <tr>
+                                    <td>Soldados</td>
+                                    <td>Uniformes de traje azul y rojo, medias blancas, espadas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tópico 5: Fiestas y Diversiones -->
+            <div id="topic-4" class="topic-content">
+                 <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Fiestas y Diversiones 🎉
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        La forma de divertirse también reflejaba las diferencias sociales. La <strong>aristocracia</strong> se reunía en "<strong>tertulias</strong>" en sus casas, donde conversaban, tomaban mate y bailaban danzas europeas como el minué.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        Los <strong>sectores populares</strong> celebraban en "<strong>Chinganas</strong>" y "pulperías", donde se vendía alcohol y comida, y se bailaban danzas como la refalosa y el cuando. Las chinganas son el origen de las fondas de Fiestas Patrias. También jugaban al trompo y al palo ensebado.
+                    </p>
+                    <p class="text-gray-800 mb-4">
+                        Las <strong>fiestas religiosas</strong> eran muy importantes para todos. La música y los bailes variaban según la región. En la zona central, nació la <strong>cueca</strong>, que se convirtió en la danza nacional de Chile.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tópico 6: Conclusión -->
+            <div id="topic-5" class="topic-content">
+                <div class="card">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 title-text underline-effect">
+                        Conclusión de la Clase 🧠
+                    </h2>
+                    <p class="text-gray-800 mb-4">
+                        Hemos aprendido que la Colonia en Chile fue un tiempo de grandes cambios, donde se formó una sociedad con reglas muy claras. Vimos cómo la vida era diferente para cada grupo social, desde los elegantes españoles hasta los trabajadores mestizos e indígenas. También descubrimos cómo se divertían y qué comían, ¡una mezcla de lo antiguo y lo nuevo!
+                    </p>
+                    <hr class="my-8 border-gray-300">
+                    <h2 class="text-3xl font-extrabold text-center mb-4 title-text">
+                        ¡Es hora de probar lo que aprendiste!
+                    </h2>
+                    <p class="text-center text-gray-700 mb-6">
+                        Has completado el recorrido por la primera clase. Ahora, desafía tus conocimientos en nuestro Gimnasio.
+                    </p>
+                    <div class="text-center">
+                        <a href="gimnasio.html" class="nav-btn" style="background-color: #27ae60; display: inline-block; padding: 0.8rem 2rem;">Ir al Gimnasio 🧠</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navegación -->
+            <div class="navigation-buttons">
+                <button id="prev-btn" class="nav-btn">Anterior</button>
+                <span id="topicIndicator" class="topic-indicator">1 de 6</span>
+                <button id="nextBtn" class="nav-btn">Siguiente</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentTopic = 0;
+            const topics = document.querySelectorAll('.topic-content');
+            const totalTopics = topics.length;
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('nextBtn');
+            const topicIndicator = document.getElementById('topicIndicator');
+
+            function showTopic(index) {
+                topics.forEach((topic, i) => {
+                    topic.classList.remove('active');
+                });
+                topics[index].classList.add('active');
+                updateButtons();
+                updateTopicIndicator();
+                window.scrollTo(0, 0); // Vuelve al inicio de la página al cambiar de tópico
+            }
+
+            function updateButtons() {
+                prevBtn.disabled = (currentTopic === 0);
+                nextBtn.disabled = (currentTopic === totalTopics - 1);
+            }
+
+            function updateTopicIndicator() {
+                topicIndicator.textContent = `${currentTopic + 1} de ${totalTopics}`;
+            }
+
+            function nextTopic() {
+                if (currentTopic < totalTopics - 1) {
+                    currentTopic++;
+                    showTopic(currentTopic);
+                }
+            }
+
+            function prevTopic() {
+                if (currentTopic > 0) {
+                    currentTopic--;
+                    showTopic(currentTopic);
+                }
+            }
+
+            prevBtn.addEventListener('click', prevTopic);
+            nextBtn.addEventListener('click', nextTopic);
+
+            // Se inicializa con el primer tópico visible.
+            showTopic(currentTopic);
+        });
+    </script>
+</body>
+</html>

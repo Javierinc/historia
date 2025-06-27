@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag & Drop / Tap to Select Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Estilos base y configuración (Mobile-First) --- */
+        :root {
+            --header-height: 75px;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            color: #212529;
+            font-family: 'Montserrat', sans-serif;
+            padding-top: var(--header-height);
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .fixed-header .site-title {
+            text-align: center;
+        }
+        .fixed-header .site-title a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+        .logo-img {
+            height: 45px;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 35px;
+            }
+        }
+
+        /* --- Contenedor principal del Quiz --- */
+        .quiz-container {
+            display: flex;
+            flex-direction: column; /* Apilado en una columna por defecto (móvil) */
+            gap: 2rem;
+        }
+
+        /* --- Contenedor de los items arrastrables/seleccionables --- */
+        .items-pool {
+            display: flex;
+            flex-wrap: wrap; /* Permite que los items pasen a la siguiente línea */
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px dashed #888;
+            border-radius: 8px;
+            min-height: 80px; /* Espacio mínimo incluso si está vacío */
+        }
+        
+        /* --- Contenedor de las descripciones y zonas para soltar --- */
+        .descriptions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* --- Estilo de cada fila de descripción --- */
+        .description-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #555;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        /* --- Zona donde se suelta/asigna el item --- */
+        .drop-zone {
+            width: 150px;
+            min-width: 150px; /* Ancho fijo para consistencia */
+            height: 50px;
+            border: 2px dashed #888;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* --- Estilo de un item individual --- */
+        .item {
+            padding: 0.5rem 1rem;
+            background-color: #08a;
+            color: white;
+            border-radius: 6px;
+            cursor: grab; /* Cursor de agarre para escritorio */
+            user-select: none; /* Evita seleccionar el texto al arrastrar */
+        }
+        .item.dragging {
+            opacity: 0.5; /* Semitransparente mientras se arrastra */
+        }
+        
+        /* --- Estilo para el item seleccionado en móvil --- */
+        .item.selected {
+            outline: 2px solid #0af;
+            outline-offset: 2px;
+        }
+
+        /* --- Estilo visual para la zona al pasar por encima con un item (escritorio) --- */
+        .drop-zone.drag-over {
+            background-color: #0af3; /* Tinte azulado */
+        }
+
+        /* --- Estilos para los botones de acción --- */
+        .actions {
+            margin-top: 2rem;
+            text-align: center;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .actions button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .actions .check-btn { background-color: #2a2; color: white; }
+        .actions .reset-btn { background-color: #a22; color: white; }
+
+        /* --- Estilos para la validación --- */
+        #results { margin-top: 1rem; text-align: center; font-weight: bold; }
+        .drop-zone.correct { border: 2px solid #2a2; }
+        .drop-zone.incorrect { border: 2px solid #a22; }
+
+        /* --- Estilos para Accesibilidad --- */
+        /* Oculta un elemento visualmente, pero lo mantiene accesible para lectores de pantalla */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* --- Layout para Escritorio (@media query) --- */
+        @media (min-width: 768px) {
+            .quiz-container {
+                display: grid;
+                grid-template-columns: 1fr 2fr; /* Dos columnas: 1 parte para items, 2 para descripciones */
+                align-items: flex-start; /* Alinea los contenedores en la parte superior */
+            }
+            .items-pool {
+                flex-direction: column; /* Apila los items verticalmente en escritorio */
+                flex-wrap: nowrap;
+            }
+        }
+        
+        /* --- Estilos de cabecera y pie de página --- */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #555;
+            margin-bottom: 1rem;
+        }
+        .site-header .site-title a {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-decoration: none;
+            color: inherit;
+        }
+        .site-header .topic-title {
+            font-size: 1em;
+            color: #aaa;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #555;
+        }
+        footer a {
+            color: #0af;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
+    </header>
+
+    <h1>Quiz de Conceptos: La Colonia</h1>
+    <p>Arrastra el concepto a su definición correcta (en computador) o toca un concepto y luego su casilla (en celular) para relacionarlos.</p>
+    
+    <div class="quiz-container">
+        <div id="items-pool" class="items-pool">
+            <!-- Items generados por JavaScript -->
+        </div>
+        <div id="descriptions-list" class="descriptions-list">
+            <!-- Descripciones generadas por JavaScript -->
+        </div>
+    </div>
+    
+    <div class="actions">
+        <button id="check-btn" class="check-btn">Revisar</button>
+        <button id="reset-btn" class="reset-btn">Reiniciar</button>
+    </div>
+
+    <p id="results"></p>
+
+    <!-- Elemento para notificaciones de accesibilidad -->
+    <div class="sr-only" aria-live="polite" id="aria-live-region"></div>
+
+    <footer>
+        <a href="gimnasio.html" class="nav-btn">← Volver al Gimnasio</a>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const concepts = [
+                { id: 'criollos', text: 'Criollos' },
+                { id: 'mestizaje', text: 'Mestizaje' },
+                { id: 'hacienda', text: 'Hacienda' },
+                { id: 'tertulia', text: 'Tertulia' },
+                { id: 'chingana', text: 'Chingana' }
+            ];
+
+            const descriptions = [
+                { id: 'criollos', text: 'Hijos de españoles que nacieron en América. Poseían tierras pero no podían acceder a los cargos políticos más importantes.' },
+                { id: 'mestizaje', text: 'Proceso de mezcla biológica y cultural entre españoles e indígenas, que dio origen al grupo más numeroso de la sociedad.' },
+                { id: 'hacienda', text: 'Gran propiedad en el campo dedicada a la agricultura y la ganadería. Fue el centro de la vida económica rural.' },
+                { id: 'tertulia', text: 'Reunión social de la aristocracia donde se conversaba, se tocaba música y se bailaban danzas europeas.' },
+                { id: 'chingana', text: 'Lugar informal de fiesta para los sectores populares, considerado el origen de las fondas chilenas.' }
+            ];
+
+            const itemsPool = document.getElementById('items-pool');
+            const descriptionsList = document.getElementById('descriptions-list');
+            const checkBtn = document.getElementById('check-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const resultsEl = document.getElementById('results');
+            const ariaLiveRegion = document.getElementById('aria-live-region');
+
+            // --- 2. DETECCIÓN DEL TIPO DE INTERACCIÓN ---
+            
+            // Se determina el modo de interacción basado en el tipo de puntero principal.
+            // 'pointer: fine' corresponde a un mouse o trackpad (escritorio), por lo que se usará Drag & Drop.
+            // Si es 'coarse' (dedo), se usará el modo de tocar para seleccionar (Tap-to-select).
+            // Esto resuelve el conflicto en dispositivos híbridos (ej. laptop táctil con mouse).
+            const useDragAndDrop = window.matchMedia('(pointer: fine)').matches;
+
+
+            // --- 3. LÓGICA PRINCIPAL DE INICIALIZACIÓN ---
+
+            function initQuiz() {
+                // Limpia los contenedores y resultados anteriores.
+                itemsPool.innerHTML = '';
+                descriptionsList.innerHTML = '';
+                resultsEl.textContent = '';
+                
+                // Baraja los datos para que el orden sea diferente cada vez.
+                const shuffledItems = [...concepts].sort(() => Math.random() - 0.5);
+                const shuffledDescriptions = [...descriptions].sort(() => Math.random() - 0.5);
+
+                // Crea y añade los elementos "item" al contenedor de items.
+                shuffledItems.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.classList.add('item');
+                    itemEl.dataset.id = item.id; // Asigna el ID del dato para la validación.
+                    itemEl.textContent = item.text;
+                    itemsPool.appendChild(itemEl);
+                });
+
+                // Crea y añade las filas de descripción con sus zonas para soltar/asignar.
+                shuffledDescriptions.forEach(desc => {
+                    const row = document.createElement('div');
+                    row.classList.add('description-row');
+                    row.innerHTML = `
+                        <div class="drop-zone" data-id="${desc.id}"></div>
+                        <p>${desc.text}</p>
+                    `;
+                    descriptionsList.appendChild(row);
+                });
+
+                // Inicia el modo de interacción apropiado.
+                if (useDragAndDrop) {
+                    initDesktopDragAndDrop();
+                } else {
+                    initMobileTap();
+                }
+            }
+
+
+            // --- 4. MODO DE INTERACCIÓN PARA ESCRITORIO (DRAG & DROP) ---
+            
+            function initDesktopDragAndDrop() {
+                const items = document.querySelectorAll('.item');
+                const dropZones = document.querySelectorAll('.drop-zone');
+
+                // Añade listeners a cada item arrastrable.
+                items.forEach(item => {
+                    item.draggable = true; // Hace que el elemento sea arrastrable nativamente.
+                    
+                    item.addEventListener('dragstart', (e) => {
+                        // Al empezar a arrastrar, guarda el ID del item.
+                        e.dataTransfer.setData('text/plain', item.dataset.id);
+                        // Añade una clase para dar feedback visual.
+                        item.classList.add('dragging');
+                    });
+
+                    item.addEventListener('dragend', () => {
+                        // Al soltar, limpia la clase de feedback.
+                        item.classList.remove('dragging');
+                    });
+                });
+
+                // Añade listeners a cada zona donde se puede soltar.
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', (e) => {
+                        // Previene el comportamiento por defecto del navegador para permitir el 'drop'.
+                        e.preventDefault();
+                        // Si la zona está vacía, añade una clase para feedback visual.
+                        if (!zone.hasChildNodes()) {
+                            zone.classList.add('drag-over');
+                        }
+                    });
+
+                    zone.addEventListener('dragleave', () => {
+                        // Limpia el feedback visual al salir de la zona.
+                        zone.classList.remove('drag-over');
+                    });
+
+                    zone.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        zone.classList.remove('drag-over');
+                        // Solo permite soltar si la zona está vacía.
+                        if (zone.hasChildNodes()) return;
+
+                        // Recupera el ID del item que se está arrastrando.
+                        const itemId = e.dataTransfer.getData('text/plain');
+                        const draggedItem = document.querySelector(`.item[data-id="${itemId}"]`);
+
+                        // Mueve el item a la zona.
+                        if (draggedItem) {
+                            zone.appendChild(draggedItem);
+                        }
+                    });
+                });
+
+                // Hace que el contenedor de items también sea una zona para soltar,
+                // para poder devolver items a la "piscina".
+                itemsPool.addEventListener('dragover', (e) => e.preventDefault());
+                itemsPool.addEventListener('drop', (e) => {
+                    const itemId = e.dataTransfer.getData('text/plain');
+                    const draggedItem = document.querySelector(`.item[data-id="${itemId}"]`);
+                    if (draggedItem) {
+                        itemsPool.appendChild(draggedItem);
+                    }
+                });
+            }
+
+
+            // --- 5. MODO DE INTERACCIÓN PARA MÓVIL (TAP-TO-SELECT) ---
+
+            function initMobileTap() {
+                let selectedItem = null; // Variable para guardar el item seleccionado.
+
+                document.body.addEventListener('click', (e) => {
+                    const target = e.target;
+                    
+                    // --- Caso 1: Se ha tocado un item ---
+                    if (target.classList.contains('item')) {
+                        // Si ya había un item seleccionado, le quita el estilo.
+                        if (selectedItem) {
+                            selectedItem.classList.remove('selected');
+                        }
+                        // Si se toca el mismo item que ya estaba seleccionado, se deselecciona.
+                        // Si no, se selecciona el nuevo item.
+                        selectedItem = (selectedItem === target) ? null : target;
+                        
+                        // Si hay un nuevo item seleccionado, le pone el estilo.
+                        if (selectedItem) {
+                            selectedItem.classList.add('selected');
+                        }
+                    } 
+                    // --- Caso 2: Se ha tocado una zona para soltar y hay un item seleccionado ---
+                    else if (target.classList.contains('drop-zone') && selectedItem) {
+                        // Solo permite la asignación si la zona está vacía.
+                        if (!target.hasChildNodes()) {
+                            target.appendChild(selectedItem);
+                            // Notifica a los lectores de pantalla que el item se ha asignado.
+                            ariaLiveRegion.textContent = 'Item asignado.';
+                        }
+                        // Limpia la selección después del movimiento.
+                        selectedItem.classList.remove('selected');
+                        selectedItem = null;
+                    }
+                    // --- Caso 3: Se ha tocado el contenedor de items y hay un item seleccionado ---
+                    else if (target.id === 'items-pool' && selectedItem) {
+                         itemsPool.appendChild(selectedItem);
+                         selectedItem.classList.remove('selected');
+                         selectedItem = null;
+                    }
+                });
+            }
+
+
+            // --- 6. LÓGICA DE VALIDACIÓN Y REINICIO ---
+
+            function checkAnswers() {
+                const dropZones = document.querySelectorAll('.drop-zone');
+                let correctCount = 0;
+
+                dropZones.forEach(zone => {
+                    const item = zone.querySelector('.item');
+                    // Limpia validaciones anteriores.
+                    zone.classList.remove('correct', 'incorrect');
+
+                    if (item && item.dataset.id === zone.dataset.id) {
+                        zone.classList.add('correct');
+                        correctCount++;
+                    } else {
+                        zone.classList.add('incorrect');
+                    }
+                });
+                
+                resultsEl.textContent = `Resultado: ${correctCount} de ${concepts.length} correctas.`;
+            }
+
+            // Asigna los listeners a los botones.
+            checkBtn.addEventListener('click', checkAnswers);
+            resetBtn.addEventListener('click', initQuiz);
+            
+            // Inicia el quiz al cargar la página.
+            initQuiz();
+        });
+    </script>
+</body>
+</html> 

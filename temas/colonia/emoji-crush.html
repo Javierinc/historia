@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Crush</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --header-height: 75px;
+            --board-size: 8;
+            --cell-size: 50px;
+        }
+        html, body {
+            height: 100%; 
+            margin: 0; 
+            overflow-x: hidden; 
+            background-color: #f0f4f8; /* Un fondo más suave */
+        }
+        body {
+            font-family: 'Montserrat', sans-serif; 
+            padding-top: var(--header-height); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+        .fixed-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            background-color: #ffffff; border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); padding: 0 2rem;
+            z-index: 1000; display: flex; justify-content: center; align-items: center;
+        }
+        .fixed-header .site-title a { text-decoration: none; color: #2c3e50; }
+        .logo-img { height: 45px; width: auto; display: inline-block; vertical-align: middle; }
+        @media (max-width: 768px) { .logo-img { height: 35px; } }
+        
+        main { flex-grow: 1; padding: 1rem; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .progress-section {
+            width: 100%;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .target-text {
+            font-weight: 600;
+            color: #34495e;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        .progress-container {
+            width: 100%;
+            height: 15px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #ced4da;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #218838);
+            border-radius: 15px;
+            transition: width 0.4s ease;
+        }
+
+        #bonus-indicator {
+            color: #f39c12;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            animation: glow 1.2s infinite ease-in-out;
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        #board-container {
+            position: relative; /* Para posicionar el overlay */
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(var(--board-size), var(--cell-size));
+            grid-template-rows: repeat(var(--board-size), var(--cell-size));
+            gap: 5px;
+            background-color: #d1d8e0;
+            padding: 10px;
+            border-radius: 10px;
+            border: 5px solid #aeb8c2;
+        }
+        
+        #game-over-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(22, 34, 42, 0.75);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 10px;
+            flex-direction: column;
+            padding: 1rem;
+            line-height: 1.4;
+        }
+
+        #game-over-overlay.hidden {
+            display: none;
+        }
+
+        .timer-warning {
+            color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .cell {
+            width: var(--cell-size);
+            height: var(--cell-size);
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem; /* Emojis más grandes */
+            cursor: grab;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .cell:active {
+            cursor: grabbing;
+        }
+
+        .cell.selected {
+            background-color: #a5b1c2;
+            transform: scale(0.9);
+        }
+        
+        .cell.is-match {
+            animation: pop 0.3s ease-out forwards;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .reset-btn {
+            background-color: #1abc9c; color: white; padding: 0.7rem 1.5rem;
+            border-radius: 0.25rem; font-weight: 600; border: none;
+            cursor: pointer; transition: background-color 0.2s;
+        }
+        .reset-btn:hover { background-color: #16a085; }
+
+        footer { padding: 1rem; }
+
+        @media (max-width: 500px) {
+            :root { --cell-size: 40px; }
+            .cell { font-size: 1.5rem; }
+            .game-container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-container">
+            <div id="game-info">
+                <span>Puntaje: <span id="score">0</span></span>
+                <span>Tiempo: <span id="timer">60</span></span>
+            </div>
+            <div class="progress-section">
+                <span class="target-text">Objetivo: 1100</span>
+                <div class="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            <div id="bonus-indicator" class="hidden">¡BONUS! +10 pts</div>
+            <div id="board-container">
+                <div id="board"></div>
+                <div id="game-over-overlay" class="hidden">
+                    <div id="game-over-message"></div>
+                </div>
+            </div>
+            <button id="reset-button" class="reset-btn">Reiniciar Juego</button>
+        </div>
+    </main>
+
+    <footer>
+        <a href="gimnasio.html" class="nav-btn">← Volver al Gimnasio</a>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const boardElement = document.getElementById('board');
+        const scoreElement = document.getElementById('score');
+        const resetButton = document.getElementById('reset-button');
+        const timerElement = document.getElementById('timer');
+        const gameOverOverlay = document.getElementById('game-over-overlay');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const progressBarElement = document.getElementById('progress-bar');
+        const bonusIndicator = document.getElementById('bonus-indicator');
+
+        const boardSize = 8;
+        const emojis = ['🍓', '🍇', '🍋', '🍎', '🍍', '🍒', '🍭', '🍫'];
+        const maxScore = 2000;
+        let board = [];
+        let score = 0;
+        let timeLeft = 60;
+        let timerInterval = null;
+        let isBonusActive = false;
+        let bonusTimer = null;
+
+        let selectedCell = null;
+        let isProcessing = false;
+
+        function updateProgressBar() {
+            const percentage = Math.min((score / maxScore) * 100, 100);
+            progressBarElement.style.width = `${percentage}%`;
+        }
+
+        function startGame() {
+            score = 0;
+            scoreElement.textContent = score;
+            updateProgressBar();
+            selectedCell = null;
+            isProcessing = false;
+            gameOverOverlay.classList.add('hidden');
+            deactivateBonus();
+            clearTimeout(bonusTimer);
+            
+            createBoard();
+
+            timeLeft = 60;
+            timerElement.textContent = timeLeft;
+            timerElement.classList.remove('timer-warning');
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            clearTimeout(bonusTimer);
+            bonusTimer = setTimeout(deactivateBonus, 5000);
+        }
+
+        function updateTimer() {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            if (timeLeft <= 10) {
+                timerElement.classList.add('timer-warning');
+            }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                isProcessing = true; // Bloquea el juego
+                gameOverMessage.innerHTML = `¡Juego Finalizado!<br>Tu puntaje es: ${score}`;
+                gameOverOverlay.classList.remove('hidden');
+            }
+        }
+
+        function activateBonus() {
+            isBonusActive = true;
+            bonusIndicator.classList.remove('hidden');
+            clearTimeout(bonusTimer);
+            bonusTimer = setTimeout(deactivateBonus, 5000);
+        }
+
+        function deactivateBonus() {
+            isBonusActive = false;
+            bonusIndicator.classList.add('hidden');
+        }
+
+        function createBoard() {
+            boardElement.innerHTML = '';
+            board = [];
+            for (let row = 0; row < boardSize; row++) {
+                const rowArray = [];
+                for (let col = 0; col < boardSize; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    
+                    let randomEmoji;
+                    do {
+                        randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                    } while (
+                        (col >= 2 && randomEmoji === rowArray[col - 1] && randomEmoji === rowArray[col - 2]) ||
+                        (row >= 2 && randomEmoji === board[row - 1][col] && randomEmoji === board[row - 2][col])
+                    );
+                    
+                    cell.textContent = randomEmoji;
+                    rowArray.push(randomEmoji);
+                    boardElement.appendChild(cell);
+                }
+                board.push(rowArray);
+            }
+        }
+        
+        function getCellElement(row, col) {
+            return boardElement.querySelector(`[data-row='${row}'][data-col='${col}']`);
+        }
+        
+        function handleCellClick(event) {
+            if (isProcessing || !event.target.classList.contains('cell')) return;
+            
+            const clickedCell = event.target;
+
+            if (selectedCell === null) {
+                selectedCell = clickedCell;
+                selectedCell.classList.add('selected');
+            } else {
+                if (selectedCell === clickedCell) {
+                    selectedCell.classList.remove('selected');
+                    selectedCell = null;
+                    return;
+                }
+
+                if (areAdjacent(selectedCell, clickedCell)) {
+                    swapCells(selectedCell, clickedCell);
+                } else {
+                    selectedCell.classList.remove('selected');
+                    selectedCell = clickedCell;
+                    selectedCell.classList.add('selected');
+                }
+            }
+        }
+        
+        function areAdjacent(cell1, cell2) {
+            const row1 = parseInt(cell1.dataset.row);
+            const col1 = parseInt(cell1.dataset.col);
+            const row2 = parseInt(cell2.dataset.row);
+            const col2 = parseInt(cell2.dataset.col);
+
+            return Math.abs(row1 - row2) + Math.abs(col1 - col2) === 1;
+        }
+
+        async function swapCells(cell1, cell2) {
+            isProcessing = true;
+            const r1 = parseInt(cell1.dataset.row), c1 = parseInt(cell1.dataset.col);
+            const r2 = parseInt(cell2.dataset.row), c2 = parseInt(cell2.dataset.col);
+
+            [board[r1][c1], board[r2][c2]] = [board[r2][c2], board[r1][c1]];
+            [cell1.textContent, cell2.textContent] = [cell2.textContent, cell1.textContent];
+            
+            cell1.classList.remove('selected');
+            selectedCell = null;
+
+            const matches = findMatches();
+            if (matches.cells.length > 0) {
+                await processMatches(matches);
+            } else {
+                // Invalid move, swap back
+                [board[r1][c1], board[r2][c2]] = [board[r2][c2], board[r1][c1]];
+                [cell1.textContent, cell2.textContent] = [cell2.textContent, cell1.textContent];
+            }
+            isProcessing = false;
+        }
+
+        function findMatches() {
+            const cellsToRemove = new Set();
+            let maxMatchLength = 0;
+
+            // Check rows
+            for (let r = 0; r < boardSize; r++) {
+                for (let c = 0; c < boardSize - 2; ) {
+                    const emoji = board[r][c];
+                    if (emoji === null) { c++; continue; }
+                    
+                    let matchLength = 1;
+                    while (c + matchLength < boardSize && board[r][c + matchLength] === emoji) {
+                        matchLength++;
+                    }
+
+                    if (matchLength >= 3) {
+                        if (matchLength > maxMatchLength) maxMatchLength = matchLength;
+                        for (let i = 0; i < matchLength; i++) cellsToRemove.add(`${r}-${c + i}`);
+                    }
+                    c += matchLength;
+                }
+            }
+
+            // Check columns
+            for (let c = 0; c < boardSize; c++) {
+                for (let r = 0; r < boardSize - 2; ) {
+                    const emoji = board[r][c];
+                    if (emoji === null) { r++; continue; }
+
+                    let matchLength = 1;
+                    while (r + matchLength < boardSize && board[r + matchLength][c] === emoji) {
+                        matchLength++;
+                    }
+
+                    if (matchLength >= 3) {
+                        if (matchLength > maxMatchLength) maxMatchLength = matchLength;
+                        for (let i = 0; i < matchLength; i++) cellsToRemove.add(`${r + i}-${c}`);
+                    }
+                    r += matchLength;
+                }
+            }
+            
+            return { cells: Array.from(cellsToRemove), maxMatch: maxMatchLength };
+        }
+
+        async function processMatches(matches) {
+            let pointsPerEmoji = 15;
+            if (isBonusActive) pointsPerEmoji += 10;
+            
+            score += matches.cells.length * pointsPerEmoji;
+            scoreElement.textContent = score;
+            updateProgressBar();
+
+            if (matches.maxMatch >= 4) activateBonus();
+
+            for (const match of matches.cells) {
+                const [r, c] = match.split('-').map(Number);
+                const cell = getCellElement(r, c);
+                cell.classList.add('is-match');
+                board[r][c] = null;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 300)); // Wait for pop animation
+
+            dropCells();
+            refillBoard();
+
+            const newMatches = findMatches();
+            if (newMatches.cells.length > 0) {
+                await processMatches(newMatches); // Cascade
+            }
+        }
+        
+        function dropCells() {
+            for (let c = 0; c < boardSize; c++) {
+                let emptyRow = boardSize - 1;
+                for (let r = boardSize - 1; r >= 0; r--) {
+                    if (board[r][c] !== null) {
+                        if (r !== emptyRow) {
+                            board[emptyRow][c] = board[r][c];
+                            board[r][c] = null;
+                            getCellElement(emptyRow, c).textContent = board[emptyRow][c];
+                            getCellElement(r, c).textContent = '';
+                            getCellElement(r, c).classList.remove('is-match');
+                            getCellElement(emptyRow, c).classList.remove('is-match');
+                        }
+                        emptyRow--;
+                    }
+                }
+            }
+            // Clear animations from remaining cells
+            for(let r=0; r < boardSize; r++){
+                 for(let c=0; c < boardSize; c++){
+                     getCellElement(r,c).classList.remove('is-match');
+                 }
+            }
+        }
+
+        function refillBoard() {
+            for (let r = 0; r < boardSize; r++) {
+                for (let c = 0; c < boardSize; c++) {
+                    if (board[r][c] === null) {
+                        board[r][c] = emojis[Math.floor(Math.random() * emojis.length)];
+                        getCellElement(r, c).textContent = board[r][c];
+                    }
+                }
+            }
+        }
+
+        boardElement.addEventListener('click', handleCellClick);
+        resetButton.addEventListener('click', startGame);
+        
+        startGame();
+    });
+    </script>
+</body>
+</html> 

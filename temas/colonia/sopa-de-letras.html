@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sopa de Letras: La Colonia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --header-height: 75px;
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            padding-top: var(--header-height);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: #ffffff;
+            border-bottom: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 0 2rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo-img { height: 45px; }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 1rem;
+        }
+
+        .game-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        #grid-container {
+            display: grid;
+            border: 2px solid #bdc3c7;
+            background-color: white;
+            user-select: none;
+        }
+
+        .grid-cell {
+            /* El tamaño se establecerá dinámicamente con JavaScript */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: 1px solid #ecf0f1;
+        }
+        
+        .grid-cell.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .grid-cell.found {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .sidebar {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #word-list ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        #word-list li {
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        #word-list li.found {
+            text-decoration: line-through;
+            color: var(--dark-gray);
+        }
+
+        .game-info {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-restart { background-color: #e74c3c; color: white; }
+        .btn-restart:hover { background-color: #c0392b; }
+        .btn-back { background-color: #34495e; color: white; }
+        .btn-back:hover { background-color: #2c3e50; }
+        
+        @media (min-width: 768px) {
+            .game-wrapper {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .sidebar { max-width: 250px; }
+        }
+
+    </style>
+</head>
+<body>
+    <header class="fixed-header">
+        <div class="site-title">
+            <a href="../../index.html">
+                <img src="../../assets/images/logo.png" alt="Fátima exploradora" class="logo-img">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-wrapper">
+            <div id="grid-container"></div>
+            <div class="sidebar">
+                <h2>Palabras a Encontrar</h2>
+                <div id="word-list"></div>
+                <div class="game-info">
+                    <strong>Puntaje: <span id="score">0</span></strong>
+                </div>
+                <div class="actions">
+                    <button id="restart-btn" class="btn btn-restart">Reiniciar</button>
+                    <a href="gimnasio.html" class="btn btn-back">Volver</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const isMobile = window.innerWidth < 768;
+
+        const desktopConfig = {
+            WORDS: ["CRIOLLO", "MESTIZO", "HACIENDA", "TERTULIA", "CHINGANA", "ESPAÑOL", "IGLESIA"],
+            GRID_SIZE: 14,
+            CELL_SIZE: 35
+        };
+
+        const mobileConfig = {
+            WORDS: ["CRIOLLO", "MESTIZO", "ESPAÑOL", "IGLESIA", "HACIENDA"],
+            GRID_SIZE: 10,
+            CELL_SIZE: 30
+        };
+
+        const config = isMobile ? mobileConfig : desktopConfig;
+        const { WORDS, GRID_SIZE, CELL_SIZE } = config;
+
+        let grid = [];
+        let score = 0;
+        let isSelecting = false;
+        let selection = [];
+
+        const gridContainer = document.getElementById('grid-container');
+        const wordListContainer = document.getElementById('word-list');
+        const scoreEl = document.getElementById('score');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function initGame() {
+            score = 0;
+            selection = [];
+            isSelecting = false;
+            updateScore();
+            
+            grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
+
+            for (const word of WORDS) {
+                let placed = false;
+                let attempts = 0;
+                while (!placed && attempts < 100) {
+                    const direction = Math.floor(Math.random() * 3);
+                    const row = Math.floor(Math.random() * GRID_SIZE);
+                    const col = Math.floor(Math.random() * GRID_SIZE);
+
+                    if (canPlaceWord(word, row, col, direction)) {
+                        placeWord(word, row, col, direction);
+                        placed = true;
+                    }
+                    attempts++;
+                }
+            }
+            
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (grid[r][c] === '') {
+                        grid[r][c] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random() * 26)];
+                    }
+                }
+            }
+            
+            renderGrid();
+            renderWordList();
+        }
+
+        function canPlaceWord(word, row, col, direction) {
+            if (direction === 0) {
+                if (col + word.length > GRID_SIZE) return false;
+                for (let i = 0; i < word.length; i++) {
+                    if (grid[row][col + i] !== '' && grid[row][col + i] !== word[i]) return false;
+                }
+            } else if (direction === 1) {
+                if (row + word.length > GRID_SIZE) return false;
+                for (let i = 0; i < word.length; i++) {
+                    if (grid[row + i][col] !== '' && grid[row + i][col] !== word[i]) return false;
+                }
+            } else if (direction === 2) {
+                if (row + word.length > GRID_SIZE || col + word.length > GRID_SIZE) return false;
+                for (let i = 0; i < word.length; i++) {
+                    if (grid[row + i][col + i] !== '' && grid[row + i][col + i] !== word[i]) return false;
+                }
+            }
+            return true;
+        }
+
+        function placeWord(word, row, col, direction) {
+            for (let i = 0; i < word.length; i++) {
+                if (direction === 0) grid[row][col + i] = word[i];
+                else if (direction === 1) grid[row + i][col] = word[i];
+                else if (direction === 2) grid[row + i][col + i] = word[i];
+            }
+        }
+        
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            gridContainer.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 1fr)`;
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.textContent = grid[r][c];
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    cell.style.width = `${CELL_SIZE}px`;
+                    cell.style.height = `${CELL_SIZE}px`;
+                    gridContainer.appendChild(cell);
+                }
+            }
+        }
+
+        function renderWordList() {
+            const ul = document.createElement('ul');
+            WORDS.forEach(word => {
+                const li = document.createElement('li');
+                li.id = `word-${word}`;
+                li.textContent = word;
+                ul.appendChild(li);
+            });
+            wordListContainer.innerHTML = '';
+            wordListContainer.appendChild(ul);
+        }
+        
+        function handleSelectionStart(e) {
+            if (e.target.classList.contains('grid-cell')) {
+                isSelecting = true;
+                selection = [e.target];
+                e.target.classList.add('selected');
+            }
+        }
+        
+        function handleSelectionMove(e) {
+            if (isSelecting && e.target.classList.contains('grid-cell') && !selection.includes(e.target)) {
+                selection.push(e.target);
+                e.target.classList.add('selected');
+            }
+        }
+
+        function handleSelectionEnd() {
+            if (!isSelecting) return;
+            isSelecting = false;
+            
+            const selectedWord = selection.map(cell => cell.textContent).join('');
+            const reversedSelectedWord = [...selectedWord].reverse().join('');
+            
+            let found = false;
+            for (const word of WORDS) {
+                if (word === selectedWord || word === reversedSelectedWord) {
+                    if (!document.getElementById(`word-${word}`).classList.contains('found')) {
+                        score++;
+                        updateScore();
+                        document.getElementById(`word-${word}`).classList.add('found');
+                        selection.forEach(cell => cell.classList.add('found'));
+                        found = true;
+                    }
+                    break;
+                }
+            }
+
+            if (!found) {
+                selection.forEach(cell => cell.classList.remove('selected'));
+            }
+            selection = [];
+        }
+
+        function updateScore() {
+            scoreEl.textContent = score;
+        }
+
+        gridContainer.addEventListener('mousedown', handleSelectionStart);
+        gridContainer.addEventListener('mouseover', handleSelectionMove);
+        document.addEventListener('mouseup', handleSelectionEnd);
+
+        gridContainer.addEventListener('touchstart', e => { e.preventDefault(); handleSelectionStart(e.touches[0]); });
+        gridContainer.addEventListener('touchmove', e => { e.preventDefault(); handleSelectionMove(e.touches[0]); });
+        document.addEventListener('touchend', handleSelectionEnd);
+
+        restartBtn.addEventListener('click', initGame);
+
+        initGame();
+    });
+    </script>
+</body>
+</html> 
