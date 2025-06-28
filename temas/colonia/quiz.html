@@ -189,6 +189,22 @@
             transition: all 0.3s ease;
         }
 
+        #progress-section {
+            margin-bottom: 1.5rem;
+        }
+        #progress-bar-container {
+            background-color: #e9ecef;
+            border-radius: 9999px;
+            height: 10px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            background-color: #3498db;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease-in-out;
+        }
+
         @media (max-width: 640px) {
             .main-container {
                 padding: 1.5rem 1rem;
@@ -230,6 +246,12 @@
                         <h2 class="text-2xl md:text-3xl font-bold mb-4 text-center text-blue-700 underline-effect">
                             ¡Pon a Prueba tu Conocimiento! 🧠
                         </h2>
+                        <div id="progress-section">
+                            <p id="progress-text" class="text-center text-gray-600 mb-2"></p>
+                            <div id="progress-bar-container">
+                                <div id="progress-bar"></div>
+                            </div>
+                        </div>
                         <div id="question-container" class="mb-4">
                             <p id="question-text" class="text-lg font-semibold text-gray-800"></p>
                         </div>
@@ -241,7 +263,6 @@
                             <button id="check-answer-btn" class="nav-btn">Comprobar Respuesta</button>
                             <button id="next-question-btn" class="nav-btn" style="display: none;">Siguiente Pregunta ➡️</button>
                         </div>
-                        <div id="score-container" class="mt-4 text-center text-xl"></div>
                     </div>
                 </div>
             </div>

@@ -1,63 +1,77 @@
 const quizData = [
+    // Clase 1
     {
-        question: "¿Entre qué años se extendió el período de la Colonia en Chile?",
-        options: ["1541 y 1810", "1598 y 1810", "1553 y 1800", "1600 y 1820"],
-        correct: 1,
-        explanation: "La Colonia comenzó con la Batalla de Curalaba en 1598 y terminó con la formación de la primera Junta de Gobierno en 1810."
-    },
-    {
-        question: "¿Cómo se llamaba al grupo social más poderoso, formado por personas nacidas en España?",
-        options: ["Criollos", "Mestizos", "Peninsulares", "Indígenas"],
-        correct: 2,
-        explanation: "Los españoles nacidos en la península ibérica, también llamados peninsulares, ocupaban los cargos más altos y tenían los mayores privilegios."
-    },
-    {
-        question: "Los Criollos eran hijos de españoles, pero ¿cuál era la principal diferencia con los peninsulares?",
-        options: ["Eran más pobres", "No podían ser dueños de tierras", "No podían ocupar los cargos políticos más importantes", "Hablaban un idioma diferente"],
-        correct: 2,
-        explanation: "Aunque los Criollos tenían poder económico, los cargos políticos más relevantes estaban reservados para los españoles nacidos en Europa."
-    },
-    {
-        question: "¿Cuál era el grupo más numeroso de la sociedad colonial, resultado de la mezcla entre españoles e indígenas?",
-        options: ["Mulatos", "Zambos", "Criollos", "Mestizos"],
+        question: "¿Cuál de estos grupos sociales tenía más poder durante la Colonia, ocupando los cargos más altos?",
+        options: ["Criollos", "Mestizos", "Indígenas", "Españoles (Peninsulares)"],
         correct: 3,
-        explanation: "Los mestizos, hijos de españoles e indígenas, formaban el grupo más grande y se dedicaban a trabajos como inquilinos, peones o artesanos."
+        explanation: "¡Correcto! Los españoles nacidos en España, también llamados Peninsulares, estaban en la cima de la pirámide social y controlaban el gobierno."
     },
     {
-        question: "¿Dónde vivía principalmente la aristocracia (españoles y criollos) durante la Colonia?",
-        options: ["En haciendas en el campo", "En las ciudades, cerca de la Plaza de Armas", "En campamentos mineros", "Al sur del río Biobío"],
+        question: "¿Qué eran las 'tertulias' en la época colonial?",
+        options: ["Fiestas populares en el campo", "Reuniones sociales de la aristocracia en sus casas", "Un tipo de escuela para niñas", "Mercados al aire libre"],
         correct: 1,
-        explanation: "La élite colonial se concentraba en las ciudades como Santiago, Concepción y La Serena, viviendo en grandes casas cerca del centro social y comercial."
+        explanation: "¡Exacto! Las tertulias eran encuentros privados de la élite donde conversaban, tomaban mate y bailaban al estilo europeo."
     },
     {
-        question: "¿Qué eran las 'tertulias'?",
-        options: ["Fiestas populares en el campo", "Reuniones sociales de la aristocracia en sus casas", "Un tipo de impuesto al comercio", "Escuelas para los niños indígenas"],
-        correct: 1,
-        explanation: "Las tertulias eran encuentros de la élite donde se conversaba, se tocaba música y se bailaban danzas europeas."
-    },
-    {
-        question: "¿Cómo se llamaban los lugares donde los sectores populares celebraban, considerados el origen de las fondas actuales?",
-        options: ["Palacios", "Catedrales", "Chinganas", "Encomiendas"],
+        question: "Los mestizos, el grupo más numeroso, eran el resultado de la mezcla entre:",
+        options: ["Españoles y Africanos", "Indígenas y Africanos", "Españoles e Indígenas", "Criollos y Peninsulares"],
         correct: 2,
-        explanation: "Las chinganas y pulperías eran los lugares informales de fiesta para mestizos e indígenas, donde se cantaba, bailaba y jugaba."
+        explanation: "¡Así es! Los mestizos eran hijos de españoles e indígenas. Trabajaban principalmente como inquilinos, peones y artesanos."
     },
     {
-        question: "¿Qué danza, que se originó en la época colonial en la zona central, se convirtió en el baile nacional de Chile?",
-        options: ["La Refalosa", "El Costillar", "La Cueca", "El Cachimbo"],
+        question: "La vida de la aristocracia colonial se centraba principalmente en:",
+        options: ["Las haciendas", "Los campamentos mineros", "Las ciudades", "Las misiones religiosas"],
         correct: 2,
-        explanation: "La cueca se desarrolló durante este período y se consolidó como la danza nacional de Chile a principios del siglo XIX."
+        explanation: "¡Muy bien! La élite vivía en las ciudades como Santiago y Concepción, cerca de la Plaza de Armas, que era el corazón de la vida social."
     },
     {
-        question: "¿Qué grupo social se encontraba en la base de la pirámide social y realizaba los trabajos más duros?",
-        options: ["Mestizos y Criollos", "Indígenas, Esclavos Africanos, Mulatos y Zambos", "Solo los Criollos", "Solo los Españoles"],
+        question: "¿Cuál de estas danzas, que se originó en la Colonia, se convirtió en el baile nacional de Chile?",
+        options: ["La refalosa", "La cueca", "El minué", "El cuando"],
         correct: 1,
-        explanation: "Estos grupos ocupaban la posición más baja, realizando trabajos forzados, domésticos y de carga en condiciones muy precarias."
+        explanation: "¡Excelente! La cueca nació en la zona central durante la Colonia y es hoy nuestro baile nacional."
     },
     {
-        question: "La vestimenta en la Colonia era un claro indicador del estatus social. ¿Quiénes usaban ropa elegante traída de Europa?",
-        options: ["Los Mestizos", "Los Huasos", "Los Indígenas", "La Aristocracia (españoles y criollos)"],
+        question: "La vestimenta era muy importante para identificar la clase social. ¿Qué grupo usaba ropa sencilla, a menudo de materiales reciclados?",
+        options: ["Aristocracia", "Clase Media / Huasos", "Sectores Populares / Indígenas", "Soldados"],
+        correct: 2,
+        explanation: "¡Correcto! Los sectores populares e indígenas usaban ropas simples, mientras que la aristocracia vestía con telas caras de Europa."
+    },
+    // Clase 2
+    {
+        question: "¿Cuál era la principal actividad económica en las haciendas de Chile colonial?",
+        options: ["Minería de oro", "Pesca de mariscos", "Agricultura y ganadería", "Fabricación de barcos"],
+        correct: 2,
+        explanation: "¡Así es! La economía se centró en la agricultura (especialmente el trigo para Perú) y la ganadería, haciendo de la hacienda el núcleo productivo."
+    },
+    {
+        question: "El sistema de 'monopolio comercial' impuesto por España significaba que Chile solo podía comerciar con:",
+        options: ["Cualquier país de Europa", "Barcos españoles", "Las colonias inglesas", "El imperio portugués"],
+        correct: 1,
+        explanation: "¡Correcto! El monopolio comercial obligaba a las colonias a comerciar únicamente con España, lo que limitaba su crecimiento económico."
+    },
+    {
+        question: "¿Qué eran los 'parlamentos' en el contexto de la Guerra de Arauco?",
+        options: ["Batallas finales para terminar la guerra", "Encuentros diplomáticos entre españoles y mapuches", "Leyes para prohibir la cultura indígena", "Tribunales para juzgar a los prisioneros"],
+        correct: 1,
+        explanation: "¡Muy bien! Los parlamentos eran reuniones diplomáticas para acordar la paz, intercambiar prisioneros y establecer fronteras, como la del río Biobío."
+    },
+    {
+        question: "¿Qué estilo artístico europeo se adaptó en América, dando lugar al 'Barroco americano'?",
+        options: ["Gótico", "Renacentista", "Neoclásico", "Barroco"],
         correct: 3,
-        explanation: "La aristocracia era el único grupo que podía permitirse vestir con ropas y telas caras importadas, siguiendo la moda europea."
+        explanation: "¡Exacto! El estilo Barroco, con sus adornos y sensación de movimiento, fue adaptado en el continente, usándose principalmente para educar en la fe católica."
+    },
+    {
+        question: "¿Quién fue Joaquín Toesca?",
+        options: ["Un famoso pintor criollo", "El autor de 'La Araucana'", "Un arquitecto que diseñó el Palacio de La Moneda", "Un líder militar español"],
+        correct: 2,
+        explanation: "¡Excelente! Joaquín Toesca fue un importante arquitecto italiano cuyo trabajo más famoso en Chile es el Palacio de La Moneda, de estilo neoclásico."
+    },
+    {
+        question: "En la Colonia, la educación era un privilegio. ¿Cuál era el objetivo principal de las 'escuelas de primeras letras'?",
+        options: ["Formar artistas y músicos", "Enseñar a todos a leer y escribir por igual", "La evangelización y la enseñanza básica", "Preparar a los niños para la guerra"],
+        correct: 2,
+        explanation: "¡Correcto! El fin principal era la evangelización (enseñar la fe católica), junto con lectura, escritura y aritmética básica para unos pocos."
     }
 ];
 
@@ -67,10 +81,11 @@ const optionsContainer = document.getElementById('options-container');
 const feedbackContainer = document.getElementById('feedback-container');
 const checkAnswerBtn = document.getElementById('check-answer-btn');
 const nextQuestionBtn = document.getElementById('next-question-btn');
-const scoreContainer = document.getElementById('score-container');
 const resultsContainer = document.getElementById('results-container');
 const finalScore = document.getElementById('final-score');
 const restartQuizBtn = document.getElementById('restart-quiz-btn');
+const progressText = document.getElementById('progress-text');
+const progressBar = document.getElementById('progress-bar');
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -81,8 +96,14 @@ function startQuiz() {
     score = 0;
     resultsContainer.style.display = 'none';
     questionWrapper.style.display = 'block';
-    scoreContainer.textContent = `Progreso: ${score} de ${quizData.length} preguntas`;
+    updateProgress();
     loadQuestion();
+}
+
+function updateProgress() {
+    const progress = (currentQuestionIndex / quizData.length) * 100;
+    progressBar.style.width = `${progress}%`;
+    progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
 }
 
 function loadQuestion() {
@@ -98,14 +119,19 @@ function loadQuestion() {
     currentQuestion.options.forEach((option, index) => {
         const button = document.createElement('button');
         button.textContent = option;
-        button.classList.add('option-btn', 'p-4', 'border-2', 'border-blue-300', 'rounded-lg', 'text-left', 'hover:bg-blue-100', 'transition-colors');
+        button.classList.add('option-btn');
         button.dataset.index = index;
         button.addEventListener('click', () => {
-            if (selectedOption !== null) {
-                optionsContainer.children[selectedOption].classList.remove('selected', 'bg-blue-200', 'border-blue-500');
+            if (checkAnswerBtn.style.display === 'none') return; // No permitir cambiar si ya se respondió
+            
+            // Remover la selección anterior
+            const currentlySelected = optionsContainer.querySelector('.selected');
+            if (currentlySelected) {
+                currentlySelected.classList.remove('selected');
             }
+            
             selectedOption = index;
-            button.classList.add('selected', 'bg-blue-200', 'border-blue-500');
+            button.classList.add('selected');
         });
         optionsContainer.appendChild(button);
     });
@@ -119,45 +145,38 @@ checkAnswerBtn.addEventListener('click', () => {
 
     const currentQuestion = quizData[currentQuestionIndex];
     const correctOptionIndex = currentQuestion.correct;
-    const optionButtons = optionsContainer.children;
     
     // Deshabilitar todas las opciones
-    for(let btn of optionButtons) {
+    Array.from(optionsContainer.children).forEach(btn => {
         btn.disabled = true;
         btn.classList.remove('hover:bg-blue-100');
-    }
+    });
 
-    const selectedButton = optionButtons[selectedOption];
-    const correctButton = optionButtons[correctOptionIndex];
+    const selectedButton = optionsContainer.children[selectedOption];
+    const correctButton = optionsContainer.children[correctOptionIndex];
 
     if (selectedOption === correctOptionIndex) {
         score++;
-        selectedButton.classList.remove('bg-blue-200');
         selectedButton.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
         
         feedbackContainer.innerHTML = `
             <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-lg">
                 <p class="text-emerald-800 font-semibold">¡Excelente respuesta! 🌟</p>
                 <p class="text-sm mt-2 text-gray-700">${currentQuestion.explanation}</p>
-                <p class="text-sm mt-2 text-emerald-600">Sigue así, ¡vas muy bien!</p>
             </div>
         `;
     } else {
-        selectedButton.classList.remove('bg-blue-200');
         selectedButton.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-800');
         correctButton.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
         
         feedbackContainer.innerHTML = `
             <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg">
-                <p class="text-amber-800 font-semibold">¡Buen intento! 💡</p>
-                <p class="text-sm mt-2 text-gray-700">La respuesta correcta era: "${currentQuestion.options[correctOptionIndex]}"</p>
+                <p class="text-amber-800 font-semibold">¡Casi! La respuesta correcta era otra. 💡</p>
                 <p class="text-sm mt-2 text-gray-700">${currentQuestion.explanation}</p>
-                <p class="text-sm mt-2 text-amber-600">¡No te desanimes! Cada pregunta es una oportunidad para aprender algo nuevo.</p>
             </div>
         `;
     }
 
-    scoreContainer.textContent = `Progreso: ${score} de ${quizData.length} preguntas`;
     feedbackContainer.style.display = 'block';
     checkAnswerBtn.style.display = 'none';
     nextQuestionBtn.style.display = 'inline-block';
@@ -166,8 +185,11 @@ checkAnswerBtn.addEventListener('click', () => {
 nextQuestionBtn.addEventListener('click', () => {
     currentQuestionIndex++;
     if (currentQuestionIndex < quizData.length) {
+        updateProgress();
         loadQuestion();
     } else {
+        progressBar.style.width = '100%';
+        progressText.textContent = `Completado`;
         showResults();
     }
 });
@@ -176,21 +198,21 @@ function showResults() {
     questionWrapper.style.display = 'none';
     resultsContainer.style.display = 'block';
     
-    const percentage = (score / quizData.length) * 100;
+    const percentage = Math.round((score / quizData.length) * 100);
     let message = '';
     
     if (percentage === 100) {
-        message = '¡Felicitaciones! 🎉 Has demostrado un excelente conocimiento de la Conquista de Chile.';
+        message = '¡Felicitaciones! 🎉 Dominas completamente el período de la Colonia en Chile.';
     } else if (percentage >= 80) {
         message = '¡Muy buen trabajo! 🌟 Tienes un sólido entendimiento del tema.';
     } else if (percentage >= 60) {
-        message = '¡Buen esfuerzo! 💪 Has aprendido bastante sobre la Conquista de Chile.';
+        message = '¡Buen esfuerzo! 💪 Sigue repasando para convertirte en un experto.';
     } else {
         message = '¡Gracias por participar! 📚 Cada intento es una oportunidad para aprender más.';
     }
 
     finalScore.innerHTML = `
-        <p class="mb-4">Obtuviste ${score} de ${quizData.length} puntos</p>
+        <p class="mb-4">Obtuviste ${score} de ${quizData.length} respuestas correctas (${percentage}%)</p>
         <p class="text-gray-700">${message}</p>
     `;
 }

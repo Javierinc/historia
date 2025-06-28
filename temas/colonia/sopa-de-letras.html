@@ -349,8 +349,21 @@
         gridContainer.addEventListener('mouseover', handleSelectionMove);
         document.addEventListener('mouseup', handleSelectionEnd);
 
-        gridContainer.addEventListener('touchstart', e => { e.preventDefault(); handleSelectionStart(e.touches[0]); });
-        gridContainer.addEventListener('touchmove', e => { e.preventDefault(); handleSelectionMove(e.touches[0]); });
+        gridContainer.addEventListener('touchstart', e => {
+            e.preventDefault();
+            handleSelectionStart(e.touches[0]);
+        });
+
+        gridContainer.addEventListener('touchmove', e => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            
+            if (element) {
+                handleSelectionMove({ target: element });
+            }
+        });
+
         document.addEventListener('touchend', handleSelectionEnd);
 
         restartBtn.addEventListener('click', initGame);
